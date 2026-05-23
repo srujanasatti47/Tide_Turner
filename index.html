@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tide Turner</title>
+<title>TORVEX</title>
 <link rel="icon" type="image/jpeg" href="logo_tt.jpeg">
 <link rel="apple-touch-icon" href="logo_tt.jpeg">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -122,20 +122,24 @@ tailwind.config = {
 </script>
 <style>
   /* ── Theme palettes ─────────────────────────────────────────────── */
-  :root, [data-theme="lavender"] {
-    --lav-50:  250 248 255;
-    --lav-100: 243 240 255;
-    --lav-200: 233 227 255;
-    --lav-300: 212 201 255;
-    --lav-400: 184 164 255;
-    --lav-500: 155 126 232;
-    --lav-600: 124 92 191;
-    --lav-700: 99 68 160;
-    --lav-800: 74 47 122;
-    --lav-900: 46 26 85;
-    --lav-950: 26 13 53;
-    --theme-grad-a: 46 26 85;
-    --theme-grad-b: 61 32 96;
+  :root, [data-theme="torvex"], [data-theme="lavender"] {
+    --lav-50:  252 247 255;
+    --lav-100: 244 232 255;
+    --lav-200: 229 205 255;
+    --lav-300: 203 158 255;
+    --lav-400: 168 95 255;
+    --lav-500: 132 56 232;
+    --lav-600: 98 35 185;
+    --lav-700: 68 26 132;
+    --lav-800: 38 16 78;
+    --lav-900: 18 8 39;
+    --lav-950: 5 3 14;
+    --theme-grad-a: 34 12 70;
+    --theme-grad-b: 84 28 150;
+    --logo-url: url('logo_tt.jpeg');
+    --logo-size: 178%;
+    --logo-position: center 16%;
+    --logo-radius: 999px;
   }
   [data-theme="ocean"] {
     --lav-50:  240 249 255;
@@ -287,9 +291,11 @@ tailwind.config = {
 
   .bg-deep {
     background:
-      radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(var(--lav-300) / .14), transparent 24rem),
-      radial-gradient(ellipse at 30% 20%, rgb(var(--theme-grad-a) / .5) 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 80%, rgb(var(--theme-grad-b) / .6) 0%, transparent 50%),
+      radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(var(--lav-300) / .18), transparent 23rem),
+      radial-gradient(ellipse at 50% -10%, rgb(var(--lav-600) / .24) 0%, transparent 38%),
+      radial-gradient(ellipse at 28% 26%, rgb(var(--theme-grad-a) / .72) 0%, transparent 58%),
+      radial-gradient(ellipse at 76% 78%, rgb(var(--theme-grad-b) / .58) 0%, transparent 52%),
+      linear-gradient(180deg, rgb(2 1 8) 0%, rgb(var(--lav-950)) 48%, rgb(1 8 16) 100%),
       rgb(var(--lav-950));
   }
 
@@ -300,6 +306,41 @@ tailwind.config = {
     pointer-events: none;
     overflow: hidden;
     perspective: 900px;
+  }
+  .ambient-ship {
+    position: absolute;
+    left: max(-8rem, -10vw);
+    top: 50%;
+    width: min(54vw, 42rem);
+    aspect-ratio: 1;
+    transform: translateY(-54%) rotateY(18deg) translateZ(-90px);
+    background-image: var(--logo-url);
+    background-size: var(--logo-size);
+    background-position: var(--logo-position);
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    opacity: .32;
+    filter: saturate(1.22) contrast(1.08) drop-shadow(0 0 48px rgb(var(--lav-500) / .34));
+    -webkit-mask-image: radial-gradient(circle at 50% 42%, black 0 48%, rgba(0,0,0,.78) 60%, transparent 78%);
+    mask-image: radial-gradient(circle at 50% 42%, black 0 48%, rgba(0,0,0,.78) 60%, transparent 78%);
+    animation: shipHover 7s ease-in-out infinite;
+  }
+  .ambient-ship::after {
+    content: '';
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--lav-300) / .24);
+    box-shadow: 0 0 80px rgb(var(--lav-400) / .18), inset 0 0 44px rgb(var(--lav-500) / .16);
+  }
+  @media (max-width: 1023px) {
+    .ambient-ship {
+      left: 50%;
+      top: 20%;
+      width: min(86vw, 28rem);
+      opacity: .18;
+      transform: translate(-50%, -50%) translateZ(-120px);
+    }
   }
   .ambient-3d::before {
     content: '';
@@ -323,8 +364,8 @@ tailwind.config = {
     transform: translate3d(-50%, -50%, -220px);
     border-radius: 50%;
     background:
-      radial-gradient(circle, rgb(var(--lav-300) / .18), transparent 58%),
-      conic-gradient(from 90deg, transparent, rgb(var(--lav-400) / .18), transparent, rgb(var(--lav-600) / .16), transparent);
+      radial-gradient(circle, rgb(var(--lav-300) / .22), transparent 56%),
+      conic-gradient(from 90deg, transparent, rgb(var(--lav-300) / .22), transparent, rgb(var(--lav-600) / .22), transparent);
     filter: blur(.5px);
     animation: slowSpin 28s linear infinite;
   }
@@ -338,9 +379,9 @@ tailwind.config = {
     transform: rotateX(62deg) translateZ(-40px);
     transform-origin: center bottom;
     background:
-      repeating-radial-gradient(ellipse at center, rgba(125,211,252,.22) 0 2px, transparent 3px 22px),
-      linear-gradient(180deg, rgba(125,211,252,.12), rgba(14,165,233,.28));
-    box-shadow: 0 -20px 80px rgba(56,189,248,.18);
+      repeating-radial-gradient(ellipse at center, rgba(185,130,255,.24) 0 2px, transparent 3px 22px),
+      linear-gradient(180deg, rgba(136,74,255,.15), rgba(34,211,238,.20));
+    box-shadow: 0 -20px 80px rgba(168,85,247,.24);
     animation: waveDrift 8s ease-in-out infinite alternate;
   }
   .wave-plane.back {
@@ -359,6 +400,10 @@ tailwind.config = {
   }
   @keyframes slowSpin {
     to { rotate: 360deg; }
+  }
+  @keyframes shipHover {
+    0%,100% { translate: 0 0; filter: saturate(1.18) contrast(1.06) drop-shadow(0 0 42px rgb(var(--lav-500) / .30)); }
+    50% { translate: 0 -12px; filter: saturate(1.35) contrast(1.12) drop-shadow(0 0 64px rgb(var(--lav-400) / .42)); }
   }
 
   .grid-cell {
@@ -436,9 +481,15 @@ tailwind.config = {
   .logo-orbit .brand-logo {
     width: 8.5rem;
     height: 8.5rem;
-    border-radius: 999px;
     transform: translateZ(42px);
     animation: logoBreathe 4s ease-in-out infinite;
+  }
+  .logo-mark {
+    background-image: var(--logo-url);
+    background-size: var(--logo-size);
+    background-position: var(--logo-position);
+    background-repeat: no-repeat;
+    border-radius: var(--logo-radius);
   }
   .logo-orbit::before,
   .logo-orbit::after {
@@ -949,6 +1000,73 @@ tailwind.config = {
   .player-tide-chip.danger .player-tide-bar > div {
     background: linear-gradient(90deg, #f87171, #ef4444);
   }
+  #screen-menu {
+    align-items: center;
+    justify-content: center;
+  }
+  @media (min-width: 1024px) {
+    #screen-menu {
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 4.5rem;
+    }
+  }
+  .menu-brand {
+    transform-style: preserve-3d;
+    position: relative;
+    z-index: 1;
+    align-self: flex-end;
+  }
+  .menu-brand-title {
+    letter-spacing: .055em;
+    font-size: clamp(3.8rem, 8vw, 7rem);
+    line-height: .82;
+    color: #fff;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    -webkit-text-fill-color: #fff;
+    -webkit-text-stroke: 1px rgb(var(--lav-200) / .38);
+    text-shadow:
+      0 0 16px rgb(255 255 255 / .28),
+      0 0 42px rgb(var(--lav-500) / .38),
+      0 18px 42px rgb(var(--lav-950) / .78);
+    filter: drop-shadow(0 10px 30px rgb(var(--lav-950) / .75));
+    animation: none;
+  }
+  .menu-controls {
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding-right: .2rem;
+  }
+  .menu-panel {
+    background:
+      linear-gradient(180deg, rgb(var(--lav-400) / .10), rgb(var(--lav-950) / .22)),
+      rgb(var(--lav-900) / .58);
+    border: 1px solid rgb(var(--lav-400) / .24);
+    box-shadow: inset 0 1px 0 rgb(var(--lav-100) / .08), 0 18px 44px rgb(var(--lav-950) / .34);
+  }
+  .menu-action-grid .glow-btn {
+    min-height: 58px;
+  }
+  .online-room-panel {
+    border: 1px solid rgb(var(--lav-400) / .24);
+    background: rgb(var(--lav-950) / .42);
+    color: rgb(var(--lav-300));
+  }
+  .room-output {
+    background: rgb(var(--lav-950) / .62);
+    border: 1px solid rgb(var(--lav-400) / .28);
+    color: rgb(var(--lav-100));
+    letter-spacing: .08em;
+  }
+  .brand-word {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .02em;
+    line-height: .92;
+  }
 
   .tap-ripple {
     position: absolute;
@@ -977,10 +1095,11 @@ tailwind.config = {
   }
 </style>
 </head>
-<body class="bg-deep min-h-screen" data-theme="lavender">
+<body class="bg-deep min-h-screen" data-theme="torvex">
 
 <!-- ══════════════════ AMBIENT FX ══════════════════ -->
 <div class="ambient-3d" aria-hidden="true">
+  <div class="ambient-ship"></div>
   <div class="orbital-glow"></div>
   <div class="wave-plane back"></div>
   <div class="wave-plane"></div>
@@ -1030,18 +1149,14 @@ tailwind.config = {
 </div>
 
 <!-- ══════════════════ SCREEN: MENU ══════════════════ -->
-<div id="screen-menu" class="screen active flex-col items-center justify-center min-h-screen px-4 py-12">
-  <div class="animate-slide-up text-center mb-8">
-    <div class="logo-orbit animate-float">
-      <img src="logo_tt.jpeg" alt="Tide Turner logo" class="brand-logo">
-    </div>
-    <h1 class="font-display text-5xl font-black tracking-wide mb-2 title-shimmer">Tide Turner</h1>
-    <p class="text-lav-400 text-base font-body">Find and sink your opponents' fleets</p>
+<div id="screen-menu" class="screen active flex-col lg:flex-row lg:gap-20 min-h-screen px-4 sm:px-8 py-8 lg:py-10">
+  <div class="menu-brand animate-slide-up text-center lg:text-left lg:w-[34rem]">
+    <h1 class="menu-brand-title font-display font-black title-shimmer brand-word">TORVEX</h1>
   </div>
 
-  <div class="animate-slide-up w-full max-w-sm space-y-3" style="animation-delay:.1s">
-    <!-- Profile (CPU mode only) -->
-    <div id="menu-profile-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-5 backdrop-blur" style="display:none">
+  <div class="menu-controls animate-slide-up w-full max-w-xl space-y-3" style="animation-delay:.1s">
+    <!-- Profile -->
+    <div id="menu-profile-box" class="menu-panel rounded-2xl p-5 backdrop-blur">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3">You</p>
       <div class="flex items-center gap-3">
         <button onclick="cycleMenuAvatar()" id="menu-avatar-btn"
@@ -1052,26 +1167,48 @@ tailwind.config = {
     </div>
 
     <!-- Mode -->
-    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+    <div class="menu-panel rounded-2xl p-6 backdrop-blur">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Game Mode</p>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <button onclick="selectMode('mp')" id="mode-mp"
           class="mode-btn glow-btn flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-lav-600 bg-lav-600/30 text-white font-bold transition-all">
           <span class="text-2xl">👥</span>
-          <span class="text-sm font-body">Multiplayer</span>
-          <span class="text-xs text-lav-300 font-normal">2–7 players</span>
+          <span class="text-sm font-body">Pass & Play</span>
+          <span class="text-xs text-lav-300 font-normal">2–7 here</span>
         </button>
         <button onclick="selectMode('cpu')" id="mode-cpu"
           class="mode-btn glow-btn flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-lav-800/60 bg-lav-900/40 text-lav-300 font-bold transition-all">
           <span class="text-2xl">🤖</span>
-          <span class="text-sm font-body">vs CPU</span>
-          <span class="text-xs text-lav-400 font-normal">Single Player</span>
+          <span class="text-sm font-body">VS CPU</span>
+          <span class="text-xs text-lav-400 font-normal">Solo</span>
         </button>
+        <button onclick="selectMode('online')" id="mode-online"
+          class="mode-btn glow-btn flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-lav-800/60 bg-lav-900/40 text-lav-300 font-bold transition-all">
+          <span class="text-2xl">🌐</span>
+          <span class="text-sm font-body">Online</span>
+          <span class="text-xs text-lav-400 font-normal">Invite Code</span>
+        </button>
+      </div>
+      <div id="online-panel" class="online-room-panel hidden mt-4 rounded-xl p-4">
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="createOnlineRoom()" class="glow-btn bg-lav-600/70 border border-lav-400/40 text-white py-3 rounded-xl font-bold text-sm">Create Room</button>
+          <button onclick="showJoinRoom()" class="glow-btn bg-lav-900/60 border border-lav-500/40 text-lav-100 py-3 rounded-xl font-bold text-sm">Join Room</button>
+        </div>
+        <div id="create-room-box" class="hidden mt-3 space-y-2">
+          <div class="room-output rounded-lg px-3 py-2 text-xs font-bold">Code: <span id="online-code">TVX-0000</span></div>
+          <div class="room-output rounded-lg px-3 py-2 text-xs font-bold normal-case tracking-normal break-all">Link: <span id="online-link">torvex://room/TVX-0000</span></div>
+        </div>
+        <div id="join-room-box" class="hidden mt-3 flex gap-2">
+          <input id="join-code-input" type="text" maxlength="12" placeholder="Enter room code"
+            class="flex-1 bg-lav-950/60 border border-lav-500/40 rounded-lg px-3 py-2 text-lav-100 font-bold uppercase focus:outline-none focus:border-lav-300 placeholder:text-lav-600">
+          <button onclick="joinOnlineRoom()" class="glow-btn bg-lav-600 text-white px-4 rounded-lg font-bold text-sm">Join</button>
+        </div>
+        <p id="join-room-status" class="hidden mt-3 text-center text-xs text-lav-300 font-bold"></p>
       </div>
     </div>
 
     <!-- AI difficulty (CPU mode only) -->
-    <div id="ai-diff-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-5 backdrop-blur" style="display:none">
+    <div id="ai-diff-box" class="menu-panel rounded-2xl p-5 backdrop-blur" style="display:none">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3">CPU Difficulty</p>
       <div class="grid grid-cols-3 gap-2">
         <button class="diff-btn" data-diff="easy" onclick="selectDifficulty('easy',this)">
@@ -1087,7 +1224,7 @@ tailwind.config = {
     </div>
 
     <!-- Player count (multiplayer only) -->
-    <div id="player-count-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+    <div id="player-count-box" class="menu-panel rounded-2xl p-6 backdrop-blur">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Number of Players</p>
       <div class="flex gap-2 justify-center flex-wrap">
         <button class="pick-btn" data-count="2" onclick="selectPlayerCount(2,this)">2</button>
@@ -1101,7 +1238,7 @@ tailwind.config = {
     </div>
 
     <!-- Ship count -->
-    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+    <div class="menu-panel rounded-2xl p-6 backdrop-blur">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Ships per Player</p>
       <div class="flex gap-2 justify-center flex-wrap">
         <button class="pick-btn selected" onclick="selectShipCount(3,this)">3</button>
@@ -1114,7 +1251,7 @@ tailwind.config = {
     </div>
 
     <!-- Match duration / tide pace -->
-    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+    <div class="menu-panel rounded-2xl p-6 backdrop-blur">
       <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
         <span>🌊</span> Tide Timer
       </p>
@@ -1129,7 +1266,7 @@ tailwind.config = {
       </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-2">
+    <div class="menu-action-grid grid grid-cols-3 gap-2">
       <button onclick="openThemes()"
         class="glow-btn bg-lav-800/60 border border-lav-600/50 text-lav-200 font-bold py-3 rounded-xl text-sm flex flex-col items-center gap-0.5">
         <span class="text-lg">🎨</span>
@@ -1250,8 +1387,7 @@ tailwind.config = {
 
     <div class="flex items-center justify-between mb-3 animate-fade-in">
       <div class="flex items-center gap-2">
-        <img src="logo_tt.jpeg" alt="Tide Turner logo" class="brand-logo w-9 h-9 rounded-full">
-        <span class="font-display font-bold text-lav-200 text-lg hidden sm:inline">Tide Turner</span>
+        <span class="font-display font-bold text-lav-200 text-base sm:text-lg brand-word">TORVEX</span>
       </div>
       <div id="turn-pill" class="flex items-center gap-2 bg-lav-800/70 border border-lav-600/50 rounded-full px-3 py-1.5">
         <span class="wave-bar text-lav-300"></span><span class="wave-bar text-lav-300"></span>
@@ -1384,7 +1520,7 @@ const AVATARS = ['🦈','🐙','🐬','🐢','🦀','🐠','🐳','🦑'];
 const DEFAULT_NAMES = ['Captain','Skipper','Admiral','Bosun','Helmsman','Pilot','Sailor'];
 
 const THEMES = [
-  { id: 'lavender', name: 'Lavender',   emoji: '💜', requires: 0,  hexes: ['#9b7ee8','#7c5cbf','#4a2f7a','#2e1a55'] },
+  { id: 'torvex',   name: 'TORVEX',      emoji: '⚓', requires: 0,  hexes: ['#cb9eff','#8438e8','#26104e','#05030e'] },
   { id: 'ocean',    name: 'Ocean Tides', emoji: '🌊', requires: 10, hexes: ['#38bdf8','#0284c7','#075985','#0c4a6e'] },
   { id: 'sunset',   name: 'Sunset Coral',emoji: '🌅', requires: 20, hexes: ['#fb923c','#ea580c','#7c2d1c','#501e19'] },
   { id: 'forest',   name: 'Forest Mist', emoji: '🌲', requires: 30, hexes: ['#4ade7d','#16a34a','#166534','#0e3c24'] },
@@ -1397,7 +1533,7 @@ const THEMES = [
 ];
 
 // ════════════════════ STATE ════════════════════
-let gameMode = 'mp';     // 'mp' | 'cpu'
+let gameMode = 'mp';     // 'mp' | 'cpu' | 'online'
 let numPlayers = 3;
 let shipCount = 3;
 
@@ -1424,7 +1560,8 @@ const TIDE_HIT_RETREAT = 9; // % tide reduced per ship sunk by attacker
 
 // Persistent
 let pvpGamesCompleted = parseInt(localStorage.getItem('pvpGames') || '0');
-let currentTheme = localStorage.getItem('theme') || 'lavender';
+let currentTheme = localStorage.getItem('theme') || 'torvex';
+if (currentTheme === 'lavender') currentTheme = 'torvex';
 let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
 let menuProfile = JSON.parse(localStorage.getItem('menuProfile') || 'null') || { name: 'You', avatar: AVATARS[0] };
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
@@ -1865,7 +2002,7 @@ function isThemeUnlocked(theme) {
 
 function updateThemeMenuLabel() {
   const t = THEMES.find(x => x.id === currentTheme);
-  document.getElementById('theme-menu-stat').textContent = '— ' + (t ? t.name : 'Lavender');
+  document.getElementById('theme-menu-stat').textContent = '— ' + (t ? t.name : 'TORVEX');
 }
 
 function openThemes() {
@@ -1932,9 +2069,46 @@ function selectMode(m) {
   const btn = document.getElementById('mode-' + m);
   btn.classList.remove('border-lav-800/60','bg-lav-900/40','text-lav-300');
   btn.classList.add('border-lav-600','bg-lav-600/30','text-white');
-  document.getElementById('player-count-box').style.display = m === 'mp' ? '' : 'none';
+  document.getElementById('player-count-box').style.display = m === 'cpu' ? 'none' : '';
   document.getElementById('ai-diff-box').style.display = m === 'cpu' ? '' : 'none';
-  document.getElementById('menu-profile-box').style.display = m === 'cpu' ? '' : 'none';
+  document.getElementById('online-panel').classList.toggle('hidden', m !== 'online');
+  if (m === 'online') {
+    document.getElementById('create-room-box').classList.add('hidden');
+    document.getElementById('join-room-box').classList.add('hidden');
+    document.getElementById('join-room-status').classList.add('hidden');
+  }
+  sfxClick();
+}
+
+function makeOnlineCode() {
+  return 'TVX-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+function createOnlineRoom() {
+  const code = makeOnlineCode();
+  document.getElementById('online-code').textContent = code;
+  document.getElementById('online-link').textContent = location.href.split('#')[0] + '#room=' + code;
+  document.getElementById('create-room-box').classList.remove('hidden');
+  document.getElementById('join-room-box').classList.add('hidden');
+  document.getElementById('join-room-status').classList.add('hidden');
+  sfxClick();
+}
+
+function showJoinRoom() {
+  document.getElementById('join-room-box').classList.remove('hidden');
+  document.getElementById('create-room-box').classList.add('hidden');
+  document.getElementById('join-room-status').classList.add('hidden');
+  document.getElementById('join-code-input').focus();
+  sfxClick();
+}
+
+function joinOnlineRoom() {
+  const input = document.getElementById('join-code-input');
+  const code = (input.value || '').trim().toUpperCase();
+  const status = document.getElementById('join-room-status');
+  status.classList.remove('hidden');
+  status.textContent = code ? 'Joined room ' + code + ' locally.' : 'Enter a room code to join.';
+  if (code) input.value = code;
   sfxClick();
 }
 
@@ -1953,14 +2127,17 @@ function selectShipCount(n, btn) {
 }
 
 function startSetup() {
-  if (gameMode === 'cpu') saveMenuProfile();
+  saveMenuProfile();
   const total = gameMode === 'cpu' ? 2 : numPlayers;
   players = [];
   for (let i = 1; i <= total; i++) {
     let name, avatar;
-    if (gameMode === 'cpu') {
-      if (i === 1) { name = menuProfile.name; avatar = menuProfile.avatar; }
-      else { name = 'CPU'; avatar = '🤖'; }
+    if (i === 1) {
+      name = menuProfile.name;
+      avatar = menuProfile.avatar;
+    } else if (gameMode === 'cpu') {
+      name = 'CPU';
+      avatar = '🤖';
     } else {
       name = 'Player ' + i;
       avatar = AVATARS[(i - 1) % AVATARS.length];
@@ -2022,7 +2199,7 @@ function showPlacementScreen(player) {
 
   // Profile picker only for multiplayer (each player picks their own)
   const profileBox = document.getElementById('place-profile-box');
-  if (gameMode === 'mp') {
+  if (gameMode !== 'cpu') {
     profileBox.style.display = '';
     renderPlaceAvatarGrid(player);
     document.getElementById('place-avatar-display').textContent = player.avatar;
@@ -2106,7 +2283,7 @@ function confirmPlacement() {
   if (placingArr.length < shipCount) return;
   const player = players[placementIdx];
   player.placements = [...placingArr];
-  if (gameMode === 'mp') {
+  if (gameMode !== 'cpu') {
     const nameEl = document.getElementById('place-name-input');
     const n = (nameEl.value || '').trim();
     if (n) player.name = n;
@@ -2553,7 +2730,7 @@ function endGame(winnerId) {
   document.getElementById('storm-flash').classList.remove('active');
   stormActive = false;
   const winner = players.find(p => p.id === winnerId);
-  const isPvP = gameMode === 'mp';
+  const isPvP = gameMode !== 'cpu';
 
   // Record game results in leaderboard (skip CPU entries)
   const stats = players.map(p => ({
@@ -2660,7 +2837,7 @@ function initInteractive3D() {
 
   const tiltSelectors = '.tilt-panel,.glow-btn,.mode-btn,.diff-btn,.pick-btn,.theme-card,.target-chip';
 
-  document.querySelectorAll('.glow-btn,.mode-btn,.diff-btn,.pick-btn,.theme-card,#menu-profile-box,#cpu-difficulty-box,#player-count-box')
+  document.querySelectorAll('.glow-btn,.mode-btn,.diff-btn,.pick-btn,.theme-card,.menu-panel,#ai-diff-box,#player-count-box')
     .forEach(el => el.classList.add('tilt-panel'));
 
   window.addEventListener('pointermove', (e) => {
@@ -2702,7 +2879,24 @@ function initInteractive3D() {
   });
 }
 
+function initLogoAsset() {
+  const preferredLogo = 'torvex_logo.jpeg';
+  const img = new Image();
+  img.onload = () => {
+    document.documentElement.style.setProperty('--logo-url', `url('${preferredLogo}')`);
+    document.documentElement.style.setProperty('--logo-size', 'cover');
+    document.documentElement.style.setProperty('--logo-position', 'center center');
+    document.documentElement.style.setProperty('--logo-radius', '24px');
+    document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]').forEach(link => {
+      link.href = preferredLogo;
+      if (link.rel === 'icon') link.type = 'image/jpeg';
+    });
+  };
+  img.src = preferredLogo;
+}
+
 // ════════════════════ INIT ════════════════════
+initLogoAsset();
 applyTheme(currentTheme);
 selectMode('mp');
 selectPlayerCount(3, document.querySelector('#player-count-box .pick-btn[data-count="3"]'));
