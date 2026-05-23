@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tide Turner</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        lav: {
+          50:  'rgb(var(--lav-50) / <alpha-value>)',
+          100: 'rgb(var(--lav-100) / <alpha-value>)',
+          200: 'rgb(var(--lav-200) / <alpha-value>)',
+          300: 'rgb(var(--lav-300) / <alpha-value>)',
+          400: 'rgb(var(--lav-400) / <alpha-value>)',
+          500: 'rgb(var(--lav-500) / <alpha-value>)',
+          600: 'rgb(var(--lav-600) / <alpha-value>)',
+          700: 'rgb(var(--lav-700) / <alpha-value>)',
+          800: 'rgb(var(--lav-800) / <alpha-value>)',
+          900: 'rgb(var(--lav-900) / <alpha-value>)',
+          950: 'rgb(var(--lav-950) / <alpha-value>)',
+        }
+      },
+      fontFamily: {
+        display: ['Cinzel', 'serif'],
+        body: ['Nunito', 'sans-serif'],
+      },
+      animation: {
+        'sink': 'sink 1.6s cubic-bezier(.4,0,.2,1) forwards',
+        'sink-wave': 'sinkWave 1.4s ease forwards',
+        'pop-in': 'popIn .4s cubic-bezier(.34,1.56,.64,1) forwards',
+        'shake': 'shake .4s ease',
+        'float': 'float 3s ease-in-out infinite',
+        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+        'confetti-fall': 'confettiFall linear forwards',
+        'slide-up': 'slideUp .5s cubic-bezier(.34,1.56,.64,1)',
+        'fade-in': 'fadeIn .4s ease',
+        'bounce-in': 'bounceIn .6s cubic-bezier(.34,1.56,.64,1)',
+        'wave': 'wave 1.5s ease-in-out infinite',
+        'ripple': 'ripple .8s ease-out forwards',
+        'crown': 'crown 1s cubic-bezier(.34,1.56,.64,1)',
+        'bubble': 'bubble 1.4s ease-out forwards',
+      },
+      keyframes: {
+        sink: {
+          '0%':   { transform: 'translateY(0) rotate(0deg) scale(1)', opacity: '1' },
+          '20%':  { transform: 'translateY(-10px) rotate(-18deg) scale(1.15)', opacity: '1' },
+          '45%':  { transform: 'translateY(0) rotate(20deg) scale(1.05)', opacity: '.95' },
+          '70%':  { transform: 'translateY(14px) rotate(40deg) scale(.85)', opacity: '.7' },
+          '100%': { transform: 'translateY(34px) rotate(70deg) scale(.4)', opacity: '0' },
+        },
+        sinkWave: {
+          '0%':   { transform: 'scale(0)', opacity: '0' },
+          '30%':  { transform: 'scale(1.1)', opacity: '.85' },
+          '70%':  { transform: 'scale(1.6)', opacity: '.4' },
+          '100%': { transform: 'scale(2)', opacity: '0' },
+        },
+        bubble: {
+          '0%':   { transform: 'translateY(0) scale(0)', opacity: '0' },
+          '30%':  { transform: 'translateY(-8px) scale(1)', opacity: '.9' },
+          '100%': { transform: 'translateY(-22px) scale(.3)', opacity: '0' },
+        },
+        popIn: {
+          '0%':   { transform: 'scale(0)', opacity: '0' },
+          '70%':  { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        shake: {
+          '0%,100%': { transform: 'translateX(0)' },
+          '20%': { transform: 'translateX(-6px) rotate(-4deg)' },
+          '40%': { transform: 'translateX(6px) rotate(4deg)' },
+          '60%': { transform: 'translateX(-4px)' },
+          '80%': { transform: 'translateX(4px)' },
+        },
+        float: {
+          '0%,100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        pulseGlow: {
+          '0%,100%': { boxShadow: '0 0 8px rgb(var(--lav-600) / .3)' },
+          '50%': { boxShadow: '0 0 20px rgb(var(--lav-600) / .7), 0 0 40px rgb(var(--lav-400) / .3)' },
+        },
+        confettiFall: {
+          '0%':   { transform: 'translateY(-20px) rotate(0deg)', opacity: '1' },
+          '100%': { transform: 'translateY(110vh) rotate(720deg)', opacity: '0' },
+        },
+        slideUp: {
+          from: { transform: 'translateY(30px)', opacity: '0' },
+          to:   { transform: 'translateY(0)', opacity: '1' },
+        },
+        fadeIn: {
+          from: { opacity: '0' }, to: { opacity: '1' },
+        },
+        bounceIn: {
+          '0%':   { transform: 'scale(0) translateY(40px)', opacity: '0' },
+          '60%':  { transform: 'scale(1.08)' },
+          '100%': { transform: 'scale(1) translateY(0)', opacity: '1' },
+        },
+        wave: {
+          '0%,100%': { transform: 'scaleY(1)' },
+          '50%': { transform: 'scaleY(.6)' },
+        },
+        ripple: {
+          '0%':   { transform: 'translate(-50%,-50%) scale(0)', opacity: '.9' },
+          '100%': { transform: 'translate(-50%,-50%) scale(3.5)', opacity: '0' },
+        },
+        crown: {
+          '0%': { transform: 'translateY(-60px) scale(0) rotate(-20deg)', opacity: '0' },
+          '70%': { transform: 'translateY(8px) scale(1.15) rotate(5deg)' },
+          '100%': { transform: 'translateY(0) scale(1) rotate(0deg)', opacity: '1' },
+        },
+      }
+    }
+  }
+}
+</script>
+<style>
+  /* ── Theme palettes ─────────────────────────────────────────────── */
+  :root, [data-theme="lavender"] {
+    --lav-50:  250 248 255;
+    --lav-100: 243 240 255;
+    --lav-200: 233 227 255;
+    --lav-300: 212 201 255;
+    --lav-400: 184 164 255;
+    --lav-500: 155 126 232;
+    --lav-600: 124 92 191;
+    --lav-700: 99 68 160;
+    --lav-800: 74 47 122;
+    --lav-900: 46 26 85;
+    --lav-950: 26 13 53;
+    --theme-grad-a: 46 26 85;
+    --theme-grad-b: 61 32 96;
+  }
+  [data-theme="ocean"] {
+    --lav-50:  240 249 255;
+    --lav-100: 224 242 254;
+    --lav-200: 186 230 253;
+    --lav-300: 125 211 252;
+    --lav-400: 56 189 248;
+    --lav-500: 14 165 233;
+    --lav-600: 2 132 199;
+    --lav-700: 3 105 161;
+    --lav-800: 7 89 133;
+    --lav-900: 12 74 110;
+    --lav-950: 8 47 73;
+    --theme-grad-a: 12 74 110;
+    --theme-grad-b: 7 89 133;
+  }
+  [data-theme="sunset"] {
+    --lav-50:  255 247 237;
+    --lav-100: 255 237 213;
+    --lav-200: 254 215 170;
+    --lav-300: 253 186 116;
+    --lav-400: 251 146 60;
+    --lav-500: 249 115 22;
+    --lav-600: 234 88 12;
+    --lav-700: 194 65 12;
+    --lav-800: 124 45 28;
+    --lav-900: 80 30 25;
+    --lav-950: 45 18 14;
+    --theme-grad-a: 80 30 25;
+    --theme-grad-b: 124 45 28;
+  }
+  [data-theme="forest"] {
+    --lav-50:  240 253 244;
+    --lav-100: 220 252 231;
+    --lav-200: 187 247 208;
+    --lav-300: 134 239 172;
+    --lav-400: 74 222 128;
+    --lav-500: 34 197 94;
+    --lav-600: 22 163 74;
+    --lav-700: 21 128 61;
+    --lav-800: 22 101 52;
+    --lav-900: 14 60 36;
+    --lav-950: 5 30 18;
+    --theme-grad-a: 14 60 36;
+    --theme-grad-b: 22 80 45;
+  }
+  [data-theme="sakura"] {
+    --lav-50:  253 242 248;
+    --lav-100: 252 231 243;
+    --lav-200: 251 207 232;
+    --lav-300: 249 168 212;
+    --lav-400: 244 114 182;
+    --lav-500: 236 72 153;
+    --lav-600: 219 39 119;
+    --lav-700: 157 23 77;
+    --lav-800: 110 18 60;
+    --lav-900: 70 14 45;
+    --lav-950: 40 8 28;
+    --theme-grad-a: 70 14 45;
+    --theme-grad-b: 100 20 60;
+  }
+  [data-theme="midnight"] {
+    --lav-50:  248 250 252;
+    --lav-100: 241 245 249;
+    --lav-200: 226 232 240;
+    --lav-300: 203 213 225;
+    --lav-400: 148 163 184;
+    --lav-500: 100 116 139;
+    --lav-600: 71 85 105;
+    --lav-700: 51 65 85;
+    --lav-800: 30 41 59;
+    --lav-900: 15 23 42;
+    --lav-950: 2 6 23;
+    --theme-grad-a: 15 23 42;
+    --theme-grad-b: 30 41 59;
+  }
+  [data-theme="sand"] {
+    --lav-50:  255 251 235;
+    --lav-100: 254 243 199;
+    --lav-200: 253 230 138;
+    --lav-300: 252 211 77;
+    --lav-400: 251 191 36;
+    --lav-500: 245 158 11;
+    --lav-600: 217 119 6;
+    --lav-700: 146 64 14;
+    --lav-800: 90 40 12;
+    --lav-900: 55 25 8;
+    --lav-950: 32 16 5;
+    --theme-grad-a: 55 25 8;
+    --theme-grad-b: 90 40 12;
+  }
+  [data-theme="aurora"] {
+    --lav-50:  236 254 255;
+    --lav-100: 207 250 254;
+    --lav-200: 165 243 252;
+    --lav-300: 103 232 249;
+    --lav-400: 34 211 238;
+    --lav-500: 6 182 212;
+    --lav-600: 8 145 178;
+    --lav-700: 14 116 144;
+    --lav-800: 21 94 117;
+    --lav-900: 18 66 82;
+    --lav-950: 6 36 48;
+    --theme-grad-a: 18 66 82;
+    --theme-grad-b: 21 94 117;
+  }
+  [data-theme="ruby"] {
+    --lav-50:  254 242 242;
+    --lav-100: 254 226 226;
+    --lav-200: 254 202 202;
+    --lav-300: 252 165 165;
+    --lav-400: 248 113 113;
+    --lav-500: 239 68 68;
+    --lav-600: 220 38 38;
+    --lav-700: 153 27 27;
+    --lav-800: 100 18 20;
+    --lav-900: 60 12 14;
+    --lav-950: 32 6 8;
+    --theme-grad-a: 60 12 14;
+    --theme-grad-b: 100 18 20;
+  }
+  [data-theme="galaxy"] {
+    --lav-50:  245 243 255;
+    --lav-100: 237 233 254;
+    --lav-200: 221 214 254;
+    --lav-300: 196 181 253;
+    --lav-400: 167 139 250;
+    --lav-500: 139 92 246;
+    --lav-600: 124 58 237;
+    --lav-700: 91 33 182;
+    --lav-800: 60 22 130;
+    --lav-900: 36 14 78;
+    --lav-950: 18 8 40;
+    --theme-grad-a: 36 14 78;
+    --theme-grad-b: 60 22 130;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: rgb(var(--lav-950));
+    color: rgb(var(--lav-200));
+    transition: background-color .4s ease, color .4s ease;
+  }
+
+  .bg-deep {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgb(var(--theme-grad-a) / .5) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, rgb(var(--theme-grad-b) / .6) 0%, transparent 50%),
+      rgb(var(--lav-950));
+  }
+
+  .grid-cell {
+    position: relative;
+    cursor: pointer;
+    transition: transform .15s, background .15s, box-shadow .15s;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .grid-cell:hover:not(.used):not(.disabled) {
+    transform: scale(1.1);
+    box-shadow: 0 0 16px rgb(var(--lav-500) / .6);
+    z-index: 10;
+  }
+  .grid-cell:active:not(.used):not(.disabled) { transform: scale(.94); }
+
+  .ship-svg { transition: all .2s; }
+  .cell-miss { animation: shake .4s ease; }
+
+  .water-splash {
+    position: absolute; inset: 0;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .ripple-ring {
+    position: absolute; top: 50%; left: 50%;
+    width: 100%; height: 100%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(100,200,255,.7);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .bubble-dot {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(180,220,255,.85);
+    box-shadow: 0 0 6px rgba(180,220,255,.6);
+    pointer-events: none;
+  }
+
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 2px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: flex; }
+
+  .glow-btn {
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,.1);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .glow-btn:hover::before { opacity: 1; }
+  .glow-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgb(var(--lav-600) / .5); }
+  .glow-btn:active { transform: translateY(1px); box-shadow: none; }
+
+  .pick-btn {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    border: 2px solid rgb(var(--lav-400) / .3);
+    background: rgb(var(--lav-400) / .08);
+    color: rgb(var(--lav-300));
+    font-size: 18px; font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pick-btn.selected {
+    background: rgb(var(--lav-600) / .6);
+    border-color: rgb(var(--lav-500));
+    color: white;
+    box-shadow: 0 0 16px rgb(var(--lav-600) / .4);
+    transform: scale(1.1);
+  }
+  .pick-btn:hover:not(.selected):not(:disabled) {
+    background: rgb(var(--lav-400) / .18);
+    border-color: rgb(var(--lav-400) / .5);
+    transform: scale(1.05);
+  }
+  .pick-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .log-entry { animation: fadeIn .25s ease; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgb(var(--lav-500) / .4); border-radius: 99px; }
+
+  .wave-bar {
+    display: inline-block;
+    width: 4px; height: 16px;
+    background: currentColor;
+    border-radius: 2px;
+    margin: 0 2px;
+    animation: wave 1.5s ease-in-out infinite;
+  }
+  .wave-bar:nth-child(2) { animation-delay: .2s; }
+  .wave-bar:nth-child(3) { animation-delay: .4s; }
+
+  .pass-overlay {
+    position: fixed; inset: 0;
+    background: rgb(var(--lav-950) / .97);
+    z-index: 100;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .theme-card {
+    transition: all .25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-card.locked { cursor: not-allowed; }
+  .theme-card.locked .theme-card-inner { filter: grayscale(.8) brightness(.45); }
+  .theme-card.selected { box-shadow: 0 0 0 3px rgb(var(--lav-400)), 0 0 24px rgb(var(--lav-500) / .6); }
+  .theme-card:hover:not(.locked) { transform: translateY(-3px); }
+
+  .target-chip {
+    transition: all .2s;
+    cursor: pointer;
+    user-select: none;
+  }
+  .target-chip.eliminated { opacity: .35; cursor: not-allowed; text-decoration: line-through; }
+  .target-chip.selected {
+    background: rgb(var(--lav-600) / .7) !important;
+    border-color: rgb(var(--lav-300)) !important;
+    color: white !important;
+    box-shadow: 0 0 14px rgb(var(--lav-500) / .6);
+  }
+
+  .diff-btn {
+    padding: 10px 6px;
+    border-radius: 10px;
+    border: 2px solid rgb(var(--lav-700) / .5);
+    background: rgb(var(--lav-800) / .4);
+    color: rgb(var(--lav-300));
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .diff-btn:hover:not(.selected) {
+    background: rgb(var(--lav-700) / .5);
+    border-color: rgb(var(--lav-500) / .6);
+  }
+  .diff-btn.selected {
+    background: rgb(var(--lav-600) / .55);
+    border-color: rgb(var(--lav-400));
+    color: white;
+    box-shadow: 0 0 14px rgb(var(--lav-600) / .5);
+  }
+
+  .avatar-pick {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    border: 2px solid rgb(var(--lav-700) / .5);
+    background: rgb(var(--lav-800) / .4);
+    font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .avatar-pick:hover:not(.selected) {
+    transform: scale(1.08);
+    background: rgb(var(--lav-700) / .55);
+    border-color: rgb(var(--lav-500) / .6);
+  }
+  .avatar-pick.selected {
+    background: rgb(var(--lav-600) / .6);
+    border-color: rgb(var(--lav-300));
+    box-shadow: 0 0 14px rgb(var(--lav-600) / .55);
+    transform: scale(1.08);
+  }
+
+  .pass-blackout {
+    position: fixed; inset: 0;
+    background: rgb(var(--lav-950));
+    z-index: 99;
+  }
+
+  /* ── Tide system ──────────────────────────────────────── */
+  .grid-stage {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    isolation: isolate;
+  }
+  .tide-layer {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 0%;
+    pointer-events: none;
+    transition: height 1s ease-out, filter .4s ease;
+    z-index: 2;
+    overflow: visible;
+  }
+  .tide-water {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 100%;
+    background: linear-gradient(180deg,
+      rgba(56,189,248,.0) 0%,
+      rgba(56,189,248,.18) 30%,
+      rgba(8,145,178,.42) 60%,
+      rgba(6,182,212,.55) 100%);
+    box-shadow: 0 -8px 28px rgba(56,189,248,.45),
+                inset 0 8px 18px rgba(140,220,255,.25);
+    backdrop-filter: blur(1.5px);
+  }
+  .tide-water::before, .tide-water::after {
+    content: '';
+    position: absolute;
+    left: -10%; right: -10%;
+    top: -10px;
+    height: 20px;
+    background: rgba(140,220,255,.6);
+    border-radius: 50%;
+    filter: blur(2px);
+    animation: tideWave 4s ease-in-out infinite;
+  }
+  .tide-water::after {
+    top: -16px;
+    height: 16px;
+    background: rgba(180,230,255,.4);
+    animation: tideWave 6s ease-in-out infinite reverse;
+  }
+  @keyframes tideWave {
+    0%,100% { transform: translateX(-4%) scaleY(1); }
+    50%     { transform: translateX(4%) scaleY(1.3); }
+  }
+  .tide-glow {
+    position: absolute;
+    left: 0; right: 0; top: -2px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(180,230,255,.9), transparent);
+    filter: blur(2px);
+    animation: tideShimmer 3s ease-in-out infinite;
+  }
+  @keyframes tideShimmer {
+    0%,100% { opacity: .5; }
+    50%     { opacity: 1; }
+  }
+
+  /* Danger pulse when tide is high */
+  .grid-stage.danger {
+    animation: dangerPulse 1.4s ease-in-out infinite;
+  }
+  .grid-stage.danger .tide-water {
+    background: linear-gradient(180deg,
+      rgba(248,113,113,.05) 0%,
+      rgba(220,38,38,.25) 30%,
+      rgba(185,28,28,.55) 60%,
+      rgba(127,29,29,.7) 100%);
+    box-shadow: 0 -8px 28px rgba(220,38,38,.55),
+                inset 0 8px 18px rgba(255,160,160,.3);
+  }
+  @keyframes dangerPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+    50%     { box-shadow: 0 0 36px 6px rgba(220,38,38,.45); }
+  }
+
+  /* Match timer urgency */
+  #match-timer.urgent {
+    color: #fca5a5;
+    animation: timerPulse 1s ease-in-out infinite;
+    text-shadow: 0 0 16px rgba(248,113,113,.7);
+  }
+  @keyframes timerPulse {
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.08); }
+  }
+  #match-timer-fill.urgent {
+    background: linear-gradient(90deg, #f87171, #fca5a5, #fecaca);
+    box-shadow: 0 0 14px rgba(248,113,113,.6);
+  }
+
+  /* Storm flash (final minute) */
+  .storm-flash {
+    position: fixed; inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 80;
+    mix-blend-mode: screen;
+  }
+  .storm-flash.active {
+    animation: stormFlash 4s ease-in-out infinite;
+  }
+  @keyframes stormFlash {
+    0%, 92%, 100% { opacity: 0; }
+    93% { opacity: .35; }
+    94% { opacity: 0; }
+    95% { opacity: .22; }
+    96% { opacity: 0; }
+  }
+
+  /* Ambient ocean particles */
+  .ocean-particle {
+    position: fixed;
+    width: 3px; height: 3px;
+    background: rgba(180,220,255,.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: .7; }
+    90%  { opacity: .5; }
+    100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+  }
+
+  /* Drowning ship animation */
+  @keyframes drown {
+    0%   { transform: translateY(0) rotate(0); opacity: 1; }
+    40%  { transform: translateY(2px) rotate(-12deg); opacity: 1; }
+    100% { transform: translateY(28px) rotate(45deg); opacity: 0; }
+  }
+  .drowning .ship-svg { animation: drown 1.4s ease-in forwards; }
+
+  /* ── Long-wave sink effect ────────────────────────────── */
+  .long-wave {
+    position: absolute;
+    left: -120%; right: -120%; top: 50%;
+    height: 220%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 3;
+    background:
+      radial-gradient(ellipse 55% 28% at center, rgba(220,245,255,.95) 0%, rgba(120,210,255,.7) 35%, transparent 70%),
+      linear-gradient(180deg, transparent 38%, rgba(56,189,248,.55) 48%, rgba(14,165,233,.7) 56%, transparent 66%);
+    filter: blur(.6px) drop-shadow(0 0 10px rgba(180,230,255,.7));
+    animation: longWaveSweep 1.7s cubic-bezier(.45,.05,.55,.95) forwards;
+  }
+  @keyframes longWaveSweep {
+    0%   { transform: translateY(-50%) translateX(-180%) scaleX(.55) scaleY(.7); opacity: 0; }
+    12%  { opacity: .9; }
+    50%  { transform: translateY(-50%) translateX(0) scaleX(1.35) scaleY(1.1); opacity: 1; }
+    78%  { opacity: .75; }
+    100% { transform: translateY(-50%) translateX(190%) scaleX(.55) scaleY(.7); opacity: 0; }
+  }
+  /* Wave crest line — bright foam top edge */
+  .wave-crest {
+    position: absolute;
+    left: -120%; right: -120%;
+    top: 50%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 5%, rgba(255,255,255,.95) 30%, rgba(255,255,255,1) 50%, rgba(255,255,255,.95) 70%, transparent 95%);
+    transform: translateY(-50%);
+    filter: blur(.6px) drop-shadow(0 0 6px rgba(255,255,255,.9));
+    pointer-events: none;
+    z-index: 4;
+    animation: longWaveSweep 1.7s cubic-bezier(.45,.05,.55,.95) forwards;
+  }
+  @keyframes shipCollapse {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+    18%  { transform: translateY(-9px) rotate(-22deg) scale(1.12); opacity: 1; }
+    42%  { transform: translateY(6px) rotate(28deg) scale(1); opacity: .9; }
+    65%  { transform: translateY(22px) rotate(65deg) scale(.65); opacity: .5; }
+    100% { transform: translateY(40px) rotate(110deg) scale(.15); opacity: 0; }
+  }
+  .sink-foam {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(220,245,255,.7) 0%, rgba(120,210,255,.35) 35%, transparent 75%);
+    animation: sinkWave 1.7s ease forwards;
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* Sunk-cell aftermath marker — replaces 💧 */
+  .sunk-ring {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(180,230,255,.75);
+    box-shadow: 0 0 10px rgba(140,210,255,.55), inset 0 0 8px rgba(220,245,255,.45);
+    background: radial-gradient(circle, rgba(56,189,248,.4), transparent 70%);
+    animation: sunkRingIn .5s cubic-bezier(.34,1.56,.64,1) forwards, sunkRingPulse 3.2s ease-in-out 0.6s infinite;
+  }
+  @keyframes sunkRingIn {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.25); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes sunkRingPulse {
+    0%,100% { box-shadow: 0 0 6px rgba(140,210,255,.4), inset 0 0 5px rgba(220,245,255,.3); }
+    50%     { box-shadow: 0 0 14px rgba(140,210,255,.7), inset 0 0 9px rgba(220,245,255,.55); }
+  }
+  /* Cell state classes — re-applied on re-render */
+  .cell-sunk {
+    background: rgba(56,189,248,.18) !important;
+    border-color: rgba(140,210,255,.55) !important;
+    box-shadow: inset 0 0 12px rgba(56,189,248,.2);
+  }
+  .cell-missed {
+    background: rgb(var(--lav-600) / .08) !important;
+    border-color: rgb(var(--lav-600) / .3) !important;
+  }
+
+  /* ── Interactive polish ──────────────────────────────── */
+  /* Animated hover halo on attackable cells */
+  .grid-cell:not(.used):not(.disabled)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: radial-gradient(circle at center, rgba(140,210,255,.0) 0%, transparent 60%);
+    transition: background .25s;
+    pointer-events: none;
+  }
+  .grid-cell:hover:not(.used):not(.disabled)::after {
+    background: radial-gradient(circle at center, rgba(140,210,255,.32) 0%, transparent 65%);
+    animation: hoverHalo 1.6s ease-in-out infinite;
+  }
+  @keyframes hoverHalo {
+    0%,100% { opacity: .55; }
+    50%     { opacity: 1; }
+  }
+
+  /* Tide chip entrance */
+  .player-tide-chip { animation: chipIn .45s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes chipIn {
+    from { opacity: 0; transform: translateY(10px) scale(.92); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Title shimmer */
+  .title-shimmer {
+    background: linear-gradient(100deg,
+      rgb(var(--lav-200)) 0%,
+      rgb(var(--lav-100)) 28%,
+      white 50%,
+      rgb(var(--lav-100)) 72%,
+      rgb(var(--lav-200)) 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleShimmer 5s linear infinite;
+  }
+  @keyframes titleShimmer {
+    0%   { background-position: 220% 0; }
+    100% { background-position: -220% 0; }
+  }
+
+  /* Target chip entrance + hover lift */
+  .target-chip { animation: chipIn .35s cubic-bezier(.34,1.56,.64,1); }
+  .target-chip:hover:not(:disabled):not(.selected) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgb(var(--lav-600) / .35);
+  }
+
+  /* Pick-btn micro-interaction on press */
+  .pick-btn:active { transform: scale(.94); }
+  .diff-btn:active { transform: scale(.96); }
+
+  /* Battle log entry slide-in */
+  .log-entry { animation: logSlide .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes logSlide {
+    from { opacity: 0; transform: translateX(-12px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Player tide chip */
+  .player-tide-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 80px;
+    background: rgb(var(--lav-900) / .55);
+    border: 1px solid rgb(var(--lav-700) / .4);
+    border-radius: 10px;
+    padding: 6px 8px;
+    transition: all .3s;
+  }
+  .player-tide-chip.danger {
+    border-color: rgba(248,113,113,.6);
+    box-shadow: 0 0 12px rgba(248,113,113,.35);
+  }
+  .player-tide-chip.eliminated {
+    opacity: .35;
+    text-decoration: line-through;
+  }
+  .player-tide-chip.active {
+    border-color: rgb(var(--lav-300));
+    box-shadow: 0 0 14px rgb(var(--lav-500) / .6);
+  }
+  .player-tide-bar {
+    height: 4px;
+    background: rgb(var(--lav-950) / .6);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .player-tide-bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #06b6d4);
+    transition: width .6s ease;
+  }
+  .player-tide-chip.danger .player-tide-bar > div {
+    background: linear-gradient(90deg, #f87171, #ef4444);
+  }
+</style>
+</head>
+<body class="bg-deep min-h-screen" data-theme="lavender">
+
+<!-- ══════════════════ AMBIENT FX ══════════════════ -->
+<div id="ocean-particles" class="pointer-events-none fixed inset-0 z-0"></div>
+<div id="storm-flash" class="storm-flash"></div>
+
+<!-- ══════════════════ CONFETTI ══════════════════ -->
+<div id="confetti-container" class="pointer-events-none"></div>
+
+<!-- ══════════════════ PASS OVERLAY ══════════════════ -->
+<div id="pass-overlay" class="pass-overlay hidden">
+  <div class="text-center animate-bounce-in px-8 max-w-sm">
+    <div class="text-6xl mb-4">🙈</div>
+    <h2 class="font-display text-2xl font-bold text-lav-200 mb-2">Pass the Device</h2>
+    <p class="text-lav-400 mb-1" id="pass-to-text">Hand it to the next player</p>
+    <p class="text-lav-500 text-sm mb-8">Cover your screen while passing!</p>
+    <button onclick="dismissPass()" class="glow-btn bg-lav-600 hover:bg-lav-500 text-white font-bold py-3 px-8 rounded-xl font-body text-base">
+      I'm Ready — Show My Screen
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════ PAUSE OVERLAY ══════════════════ -->
+<div id="pause-overlay" class="pass-overlay hidden">
+  <div class="text-center animate-bounce-in px-8 max-w-sm">
+    <div class="text-6xl mb-4">⏸</div>
+    <h2 class="font-display text-3xl font-bold text-lav-200 mb-2">Paused</h2>
+    <p class="text-lav-400 mb-6">The tide holds its breath...</p>
+    <div class="space-y-3">
+      <button onclick="togglePause()" class="glow-btn w-full bg-lav-600 hover:bg-lav-500 text-white font-bold py-3 px-8 rounded-xl font-body text-base">
+        ▶ Resume
+      </button>
+      <button onclick="quitGame()" class="glow-btn w-full border border-lav-700/50 text-lav-300 font-bold py-3 px-8 rounded-xl font-body text-base hover:bg-lav-800/40">
+        Quit to Menu
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ELIMINATION TOAST ══════════════════ -->
+<div id="elim-toast" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[90] animate-bounce-in">
+  <div class="bg-lav-900/95 border-2 border-lav-500 rounded-2xl px-6 py-4 shadow-2xl backdrop-blur text-center">
+    <div class="text-4xl mb-1">💀</div>
+    <p class="font-display text-lg font-bold text-lav-200" id="elim-toast-text">Player X eliminated!</p>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: MENU ══════════════════ -->
+<div id="screen-menu" class="screen active flex-col items-center justify-center min-h-screen px-4 py-12">
+  <div class="animate-slide-up text-center mb-8">
+    <div class="text-6xl mb-3 animate-float">⚓</div>
+    <h1 class="font-display text-5xl font-black tracking-wide mb-2 title-shimmer">Tide Turner</h1>
+    <p class="text-lav-400 text-base font-body">Find and sink your opponents' fleets</p>
+  </div>
+
+  <div class="animate-slide-up w-full max-w-sm space-y-3" style="animation-delay:.1s">
+    <!-- Profile (CPU mode only) -->
+    <div id="menu-profile-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-5 backdrop-blur" style="display:none">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3">You</p>
+      <div class="flex items-center gap-3">
+        <button onclick="cycleMenuAvatar()" id="menu-avatar-btn"
+          class="text-3xl w-14 h-14 rounded-xl bg-lav-800/60 border-2 border-lav-600/50 flex items-center justify-center hover:bg-lav-700/60 transition-all">🦈</button>
+        <input id="menu-name-input" type="text" maxlength="14" placeholder="Your name"
+          class="flex-1 bg-lav-800/40 border border-lav-600/50 rounded-xl px-3 py-2 text-lav-200 font-bold focus:outline-none focus:border-lav-400 placeholder:text-lav-600">
+      </div>
+    </div>
+
+    <!-- Mode -->
+    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Game Mode</p>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="selectMode('mp')" id="mode-mp"
+          class="mode-btn glow-btn flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-lav-600 bg-lav-600/30 text-white font-bold transition-all">
+          <span class="text-2xl">👥</span>
+          <span class="text-sm font-body">Multiplayer</span>
+          <span class="text-xs text-lav-300 font-normal">2–7 players</span>
+        </button>
+        <button onclick="selectMode('cpu')" id="mode-cpu"
+          class="mode-btn glow-btn flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-lav-800/60 bg-lav-900/40 text-lav-300 font-bold transition-all">
+          <span class="text-2xl">🤖</span>
+          <span class="text-sm font-body">vs CPU</span>
+          <span class="text-xs text-lav-400 font-normal">Single Player</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- AI difficulty (CPU mode only) -->
+    <div id="ai-diff-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-5 backdrop-blur" style="display:none">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3">CPU Difficulty</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button class="diff-btn" data-diff="easy" onclick="selectDifficulty('easy',this)">
+          <div class="text-lg">🌱</div><div class="text-xs">Easy</div>
+        </button>
+        <button class="diff-btn selected" data-diff="medium" onclick="selectDifficulty('medium',this)">
+          <div class="text-lg">⚔️</div><div class="text-xs">Medium</div>
+        </button>
+        <button class="diff-btn" data-diff="hard" onclick="selectDifficulty('hard',this)">
+          <div class="text-lg">💀</div><div class="text-xs">Hard</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Player count (multiplayer only) -->
+    <div id="player-count-box" class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Number of Players</p>
+      <div class="flex gap-2 justify-center flex-wrap">
+        <button class="pick-btn" data-count="2" onclick="selectPlayerCount(2,this)">2</button>
+        <button class="pick-btn selected" data-count="3" onclick="selectPlayerCount(3,this)">3</button>
+        <button class="pick-btn" data-count="4" onclick="selectPlayerCount(4,this)">4</button>
+        <button class="pick-btn" data-count="5" onclick="selectPlayerCount(5,this)">5</button>
+        <button class="pick-btn" data-count="6" onclick="selectPlayerCount(6,this)">6</button>
+        <button class="pick-btn" data-count="7" onclick="selectPlayerCount(7,this)">7</button>
+      </div>
+      <p class="text-center text-lav-400 text-xs mt-3">Selected: <span id="player-count-label" class="text-lav-200 font-bold">3 players</span></p>
+    </div>
+
+    <!-- Ship count -->
+    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-4">Ships per Player</p>
+      <div class="flex gap-2 justify-center flex-wrap">
+        <button class="pick-btn selected" onclick="selectShipCount(3,this)">3</button>
+        <button class="pick-btn" onclick="selectShipCount(4,this)">4</button>
+        <button class="pick-btn" onclick="selectShipCount(5,this)">5</button>
+        <button class="pick-btn" onclick="selectShipCount(6,this)">6</button>
+        <button class="pick-btn" onclick="selectShipCount(7,this)">7</button>
+      </div>
+      <p class="text-center text-lav-400 text-xs mt-3">Selected: <span id="ship-count-label" class="text-lav-200 font-bold">3 ships</span></p>
+    </div>
+
+    <!-- Match duration / tide pace -->
+    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-6 backdrop-blur">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
+        <span>🌊</span> Tide Timer
+      </p>
+      <p class="text-lav-500 text-[11px] text-center mb-4">Hit ships to push back your tide.</p>
+      <div class="grid grid-cols-2 gap-3">
+        <button class="diff-btn selected" data-dur="300" onclick="selectDuration(300,this)">
+          <div class="text-lg">⏱</div><div class="text-xs">5 min</div>
+        </button>
+        <button class="diff-btn" data-dur="420" onclick="selectDuration(420,this)">
+          <div class="text-lg">🌊</div><div class="text-xs">7 min</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+      <button onclick="openThemes()"
+        class="glow-btn bg-lav-800/60 border border-lav-600/50 text-lav-200 font-bold py-3 rounded-xl text-sm flex flex-col items-center gap-0.5">
+        <span class="text-lg">🎨</span>
+        <span class="text-xs">Themes</span>
+      </button>
+      <button onclick="openLeaderboard()"
+        class="glow-btn bg-lav-800/60 border border-lav-600/50 text-lav-200 font-bold py-3 rounded-xl text-sm flex flex-col items-center gap-0.5">
+        <span class="text-lg">🏆</span>
+        <span class="text-xs">Leaders</span>
+      </button>
+      <button onclick="toggleSound()" id="sound-toggle-btn"
+        class="glow-btn bg-lav-800/60 border border-lav-600/50 text-lav-200 font-bold py-3 rounded-xl text-sm flex flex-col items-center gap-0.5">
+        <span class="text-lg" id="sound-icon">🔊</span>
+        <span class="text-xs" id="sound-label">Sound</span>
+      </button>
+    </div>
+
+    <button onclick="startSetup()"
+      class="glow-btn w-full bg-gradient-to-r from-lav-600 to-lav-500 text-white font-display font-bold py-4 rounded-xl text-lg tracking-wide">
+      ⚓ Set Sail
+    </button>
+
+    <p class="text-center text-lav-500 text-xs">
+      PvP games played: <span id="pvp-counter" class="text-lav-300 font-bold">0</span>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: THEMES ══════════════════ -->
+<div id="screen-themes" class="screen flex-col items-center min-h-screen px-4 py-8">
+  <div class="w-full max-w-2xl animate-fade-in">
+    <div class="text-center mb-6">
+      <div class="text-5xl mb-2">🎨</div>
+      <h2 class="font-display text-3xl font-bold text-lav-200">Themes</h2>
+      <p class="text-lav-400 text-sm mt-1">Unlock new themes by playing multiplayer games. <br>Each theme unlocks after every <span class="text-lav-200 font-bold">10 games</span> with other players. CPU games don't count.</p>
+      <p class="text-lav-400 text-xs mt-3">PvP games played: <span id="themes-pvp-counter" class="text-lav-200 font-bold">0</span></p>
+    </div>
+
+    <div id="theme-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6"></div>
+
+    <button onclick="goToMenu()"
+      class="glow-btn w-full border border-lav-600/50 text-lav-200 py-3 rounded-xl font-bold hover:bg-lav-800/40 transition-all">
+      ← Back to Menu
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: LEADERBOARD ══════════════════ -->
+<div id="screen-leaders" class="screen flex-col items-center min-h-screen px-4 py-8">
+  <div class="w-full max-w-md animate-fade-in">
+    <div class="text-center mb-6">
+      <div class="text-5xl mb-2">🏆</div>
+      <h2 class="font-display text-3xl font-bold text-lav-200">Leaderboard</h2>
+      <p class="text-lav-400 text-sm mt-1">Top captains on this device</p>
+    </div>
+    <div id="leader-list" class="space-y-2 mb-6"></div>
+    <div class="flex gap-3">
+      <button onclick="clearLeaderboard()" class="glow-btn flex-1 border border-lav-700/50 text-lav-400 py-3 rounded-xl font-bold hover:bg-lav-800/40 text-sm">
+        Reset
+      </button>
+      <button onclick="goToMenu()" class="glow-btn flex-1 border border-lav-600/50 text-lav-200 py-3 rounded-xl font-bold hover:bg-lav-800/40 transition-all">
+        ← Back
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: PLACEMENT ══════════════════ -->
+<div id="screen-place" class="screen flex-col items-center min-h-screen px-4 py-8">
+  <div class="w-full max-w-lg animate-fade-in">
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center gap-2 bg-lav-800/60 border border-lav-600/40 rounded-full px-4 py-1.5 text-xs font-bold text-lav-300 uppercase tracking-widest mb-3">
+        <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        Secret Placement
+      </div>
+      <h2 class="font-display text-2xl font-bold text-lav-200" id="place-title">Player 1 — Hide Your Fleet</h2>
+      <p class="text-lav-400 text-sm mt-1">Select <span id="place-needed" class="text-lav-200 font-bold">3</span> coordinates to hide your ships. Don't let anyone peek!</p>
+    </div>
+
+    <!-- Per-player profile picker (multiplayer only) -->
+    <div id="place-profile-box" class="bg-lav-900/50 border border-lav-700/30 rounded-2xl p-4 mb-4 backdrop-blur" style="display:none">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3 text-center">Your Identity</p>
+      <div class="flex items-center gap-3 mb-3">
+        <div id="place-avatar-display" class="text-3xl w-12 h-12 rounded-xl bg-lav-800/60 border-2 border-lav-500/50 flex items-center justify-center">🦈</div>
+        <input id="place-name-input" type="text" maxlength="14" placeholder="Captain name"
+          class="flex-1 bg-lav-800/40 border border-lav-600/50 rounded-xl px-3 py-2 text-lav-200 font-bold focus:outline-none focus:border-lav-400 placeholder:text-lav-600">
+      </div>
+      <div id="place-avatar-grid" class="grid grid-cols-8 gap-2"></div>
+    </div>
+
+    <div class="flex justify-center gap-2 mb-5" id="place-pips"></div>
+
+    <div class="bg-lav-900/50 border border-lav-700/30 rounded-2xl p-4 backdrop-blur mb-4">
+      <div id="place-grid-wrap"></div>
+    </div>
+
+    <div class="bg-lav-900/40 border border-lav-700/30 rounded-xl p-3 mb-4 min-h-[48px] flex items-center gap-2 flex-wrap">
+      <span class="text-lav-500 text-xs font-bold uppercase tracking-wide">Selected:</span>
+      <div id="place-selected-list" class="flex gap-2 flex-wrap"></div>
+      <span id="place-empty-hint" class="text-lav-600 text-xs italic">Click cells to place ships...</span>
+    </div>
+
+    <div class="flex gap-3">
+      <button onclick="clearPlacement()" class="glow-btn flex-1 border border-lav-600/50 text-lav-300 py-3 rounded-xl font-bold hover:bg-lav-800/40 transition-all">
+        Clear
+      </button>
+      <button onclick="confirmPlacement()" id="place-confirm-btn" disabled
+        class="glow-btn flex-1 bg-lav-600 text-white py-3 rounded-xl font-bold disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+        Confirm Fleet ⚓
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: BATTLE ══════════════════ -->
+<div id="screen-battle" class="screen flex-col items-center min-h-screen px-3 py-6">
+  <div class="w-full max-w-2xl">
+
+    <div class="flex items-center justify-between mb-3 animate-fade-in">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">⚓</span>
+        <span class="font-display font-bold text-lav-200 text-lg hidden sm:inline">Tide Turner</span>
+      </div>
+      <div id="turn-pill" class="flex items-center gap-2 bg-lav-800/70 border border-lav-600/50 rounded-full px-3 py-1.5">
+        <span class="wave-bar text-lav-300"></span><span class="wave-bar text-lav-300"></span>
+        <span id="turn-label" class="text-xs font-bold text-lav-200 uppercase tracking-wide">Player 1's Turn</span>
+      </div>
+      <button id="pause-btn" onclick="togglePause()"
+        class="glow-btn bg-lav-800/70 border border-lav-600/50 rounded-full px-3 py-1.5 text-lav-300 text-xs font-bold flex items-center gap-1">
+        <span>⏸</span><span class="hidden sm:inline">Pause</span>
+      </button>
+    </div>
+
+    <!-- Match timer (Tide countdown) -->
+    <div id="match-timer-bar" class="mb-3 animate-fade-in">
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-lav-400 uppercase tracking-widest font-bold">🌊 Tide Rising</span>
+          <span class="text-lav-500" id="round-label">Round 1</span>
+        </div>
+        <div id="match-timer" class="font-display font-black text-2xl text-lav-200 tabular-nums tracking-wider">5:00</div>
+      </div>
+      <div class="h-2 bg-lav-950/60 rounded-full overflow-hidden border border-lav-800/50">
+        <div id="match-timer-fill" class="h-full bg-gradient-to-r from-cyan-400 via-lav-400 to-lav-600 transition-all duration-500" style="width:100%"></div>
+      </div>
+    </div>
+
+    <!-- Fleet-tide overview chips -->
+    <div id="tide-chips-row" class="flex gap-2 flex-wrap mb-3"></div>
+
+    <!-- Target selector (multi-player only) -->
+    <div id="target-row" class="bg-lav-900/40 border border-lav-700/30 rounded-xl p-3 mb-4 hidden">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-2">Pick a target</p>
+      <div id="target-chips" class="flex gap-2 flex-wrap"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-lav-900/50 border border-lav-700/30 rounded-2xl p-3 backdrop-blur animate-fade-in">
+        <p class="text-xs font-bold text-lav-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span>🛡</span> <span id="my-grid-label">My Fleet</span>
+          <span class="ml-auto text-[10px] text-cyan-300/80" id="my-tide-pct">Tide 0%</span>
+        </p>
+        <div id="my-grid-stage" class="grid-stage">
+          <div id="my-grid-wrap" class="relative" style="z-index:1"></div>
+          <div id="my-tide" class="tide-layer">
+            <div class="tide-water"><div class="tide-glow"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-lav-900/50 border border-lav-700/30 rounded-2xl p-3 backdrop-blur animate-fade-in" style="animation-delay:.1s">
+        <p class="text-xs font-bold text-lav-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+          <span>🎯</span> <span id="attack-grid-label">Attack</span>
+        </p>
+        <div id="attack-grid-wrap"></div>
+        <p id="one-shot-hint" class="text-lav-500 text-xs italic text-center mt-2">One shot — then pass the device.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div class="bg-lav-900/40 border border-lav-700/30 rounded-xl p-3 text-center">
+        <div class="text-lav-400 text-xs uppercase tracking-wide mb-1">My Hits</div>
+        <div class="text-lav-200 font-bold text-xl" id="stat-hits">0</div>
+      </div>
+      <div class="bg-lav-900/40 border border-lav-700/30 rounded-xl p-3 text-center">
+        <div class="text-lav-400 text-xs uppercase tracking-wide mb-1">My Misses</div>
+        <div class="text-lav-200 font-bold text-xl" id="stat-misses">0</div>
+      </div>
+      <div class="bg-lav-900/40 border border-lav-700/30 rounded-xl p-3 text-center">
+        <div class="text-lav-400 text-xs uppercase tracking-wide mb-1">My Ships</div>
+        <div class="text-lav-300 font-bold text-xl" id="stat-remain">3</div>
+        <div class="text-lav-500 text-xs">left</div>
+      </div>
+    </div>
+
+    <div class="bg-lav-950/60 border border-lav-800/40 rounded-xl p-3 max-h-32 overflow-y-auto" id="battle-log">
+      <p class="text-lav-500 text-xs italic">Battle log will appear here...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: WIN ══════════════════ -->
+<div id="screen-win" class="screen flex-col items-center justify-center min-h-screen px-4 py-10 text-center">
+  <div class="animate-bounce-in max-w-md w-full">
+    <div class="text-8xl mb-2 animate-crown" id="win-trophy">🏆</div>
+    <h1 class="font-display text-4xl font-black text-lav-200 mb-1" id="win-title">Victory!</h1>
+    <p class="text-lav-300 text-lg mb-4" id="win-subtitle">Player 1 wins the battle!</p>
+
+    <!-- Stats panel -->
+    <div class="bg-lav-900/60 border border-lav-700/40 rounded-2xl p-5 mb-4 backdrop-blur text-left">
+      <p class="text-lav-400 text-xs font-bold uppercase tracking-widest mb-3 text-center">Battle Report</p>
+      <div class="grid grid-cols-3 gap-3 mb-3">
+        <div class="text-center bg-lav-950/50 border border-lav-800/40 rounded-xl py-2">
+          <div class="text-2xl font-bold text-emerald-400" id="win-stat-hits">0</div>
+          <div class="text-lav-500 text-[10px] uppercase tracking-wide">Ships Found</div>
+        </div>
+        <div class="text-center bg-lav-950/50 border border-lav-800/40 rounded-xl py-2">
+          <div class="text-2xl font-bold text-lav-200" id="win-stat-acc">0%</div>
+          <div class="text-lav-500 text-[10px] uppercase tracking-wide">Accuracy</div>
+        </div>
+        <div class="text-center bg-lav-950/50 border border-lav-800/40 rounded-xl py-2">
+          <div class="text-2xl font-bold text-cyan-300" id="win-stat-time">0:00</div>
+          <div class="text-lav-500 text-[10px] uppercase tracking-wide">Time Left</div>
+        </div>
+      </div>
+      <div id="win-survivors"></div>
+    </div>
+
+    <p class="text-lav-400 text-sm mb-6 hidden" id="win-unlock"></p>
+    <div class="grid grid-cols-2 gap-3">
+      <button onclick="restartGame()"
+        class="glow-btn bg-gradient-to-r from-lav-600 to-lav-500 text-white font-display font-bold py-4 rounded-xl text-lg tracking-wide">
+        ⚓ Rematch
+      </button>
+      <button onclick="goToMenu()"
+        class="glow-btn border border-lav-600/50 text-lav-200 py-4 rounded-xl font-bold hover:bg-lav-800/40 font-display tracking-wide">
+        Menu
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════ CONSTANTS ════════════════════
+const COLS = ['A','B','C','D','E'];
+const ROWS = [1,2,3,4,5];
+const COORDS = [];
+COLS.forEach(c => ROWS.forEach(r => COORDS.push(c+r)));
+const SHIP_EMOJIS = ['🚢','⛴','🛥','⛵','🚤','🛳','🛶','🚣'];
+const PLAYER_COLORS = ['', '🟣','🟢','🟡','🔵','🟠','🔴','🟤']; // index = player id
+const AVATARS = ['🦈','🐙','🐬','🐢','🦀','🐠','🐳','🦑'];
+const DEFAULT_NAMES = ['Captain','Skipper','Admiral','Bosun','Helmsman','Pilot','Sailor'];
+
+const THEMES = [
+  { id: 'lavender', name: 'Lavender',   emoji: '💜', requires: 0,  hexes: ['#9b7ee8','#7c5cbf','#4a2f7a','#2e1a55'] },
+  { id: 'ocean',    name: 'Ocean Tides', emoji: '🌊', requires: 10, hexes: ['#38bdf8','#0284c7','#075985','#0c4a6e'] },
+  { id: 'sunset',   name: 'Sunset Coral',emoji: '🌅', requires: 20, hexes: ['#fb923c','#ea580c','#7c2d1c','#501e19'] },
+  { id: 'forest',   name: 'Forest Mist', emoji: '🌲', requires: 30, hexes: ['#4ade7d','#16a34a','#166534','#0e3c24'] },
+  { id: 'sakura',   name: 'Cherry Bloom',emoji: '🌸', requires: 40, hexes: ['#f472b6','#db2777','#9d174d','#460e2d'] },
+  { id: 'midnight', name: 'Midnight',    emoji: '🌙', requires: 50, hexes: ['#94a3b8','#475569','#1e293b','#0f172a'] },
+  { id: 'sand',     name: 'Golden Sand', emoji: '🏖', requires: 60, hexes: ['#fbbf24','#d97706','#92400e','#371908'] },
+  { id: 'aurora',   name: 'Aurora',      emoji: '🌌', requires: 70, hexes: ['#22d3ee','#0891b2','#155e75','#124252'] },
+  { id: 'ruby',     name: 'Ruby Fire',   emoji: '🔥', requires: 80, hexes: ['#f87171','#dc2626','#991b1b','#3c0c0e'] },
+  { id: 'galaxy',   name: 'Galaxy',      emoji: '✨', requires: 90, hexes: ['#a78bfa','#7c3aed','#5b21b6','#240e4e'] },
+];
+
+// ════════════════════ STATE ════════════════════
+let gameMode = 'mp';     // 'mp' | 'cpu'
+let numPlayers = 3;
+let shipCount = 3;
+
+// Per-game state
+let players = [];        // [{id, name, isCPU, placements: [], shipsHit: Set, alive: true}]
+let currentPlayerIdx = 0;
+let placementIdx = 0;
+let selectedTargetId = null;
+let attackHistory = {};  // {attackerId: {targetId: [coords]}}
+let myHits = {};         // {attackerId: {targetId: hits}}
+let myMisses = {};       // {attackerId: misses}
+let roundNum = 1;
+let actionsThisRound = 0;
+let placingArr = [];
+
+let aiDifficulty = 'medium'; // 'easy' | 'medium' | 'hard'
+let matchDuration = 300; // seconds (5 or 7 min)
+let matchTimeLeft = 300;
+let tideTimer = null;
+let isPaused = false;
+let stormActive = false;
+let playerTide = {}; // {playerId: 0..100}
+const TIDE_HIT_RETREAT = 9; // % tide reduced per ship sunk by attacker
+
+// Persistent
+let pvpGamesCompleted = parseInt(localStorage.getItem('pvpGames') || '0');
+let currentTheme = localStorage.getItem('theme') || 'lavender';
+let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+let menuProfile = JSON.parse(localStorage.getItem('menuProfile') || 'null') || { name: 'You', avatar: AVATARS[0] };
+let leaderboard = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+let attackInProgress = false;
+
+// ════════════════════ MATCH TIMER & TIDE ════════════════════
+function selectDuration(secs, btn) {
+  matchDuration = secs;
+  document.querySelectorAll('[data-dur]').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  sfxClick();
+}
+
+function formatTime(secs) {
+  const m = Math.max(0, Math.floor(secs / 60));
+  const s = Math.max(0, Math.floor(secs % 60));
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function startMatchTimer() {
+  stopMatchTimer();
+  matchTimeLeft = matchDuration;
+  stormActive = false;
+  document.getElementById('storm-flash').classList.remove('active');
+  // Reset every player's tide to 0
+  players.forEach(p => { playerTide[p.id] = 0; });
+  updateTimerUI();
+  updateAllTides();
+  tideTimer = setInterval(tideTick, 1000);
+}
+
+function stopMatchTimer() {
+  if (tideTimer) { clearInterval(tideTimer); tideTimer = null; }
+}
+
+function tideTick() {
+  if (isPaused) return;
+  matchTimeLeft = Math.max(0, matchTimeLeft - 1);
+  // Each second, everyone's tide rises by (100 / matchDuration). Eliminated players' tide stops.
+  const ratePerSec = 100 / matchDuration;
+  players.forEach(p => {
+    if (!p.alive) return;
+    playerTide[p.id] = Math.min(100, (playerTide[p.id] || 0) + ratePerSec);
+  });
+  updateTimerUI();
+  updateAllTides();
+  checkTideOverflow();
+  if (matchTimeLeft <= 0) {
+    timeUp();
+  }
+}
+
+function updateTimerUI() {
+  const lbl = document.getElementById('match-timer');
+  const fill = document.getElementById('match-timer-fill');
+  if (!lbl || !fill) return;
+  lbl.textContent = formatTime(matchTimeLeft);
+  const pct = Math.max(0, 100 * matchTimeLeft / matchDuration);
+  fill.style.width = pct + '%';
+  const urgent = matchTimeLeft <= 60;
+  lbl.classList.toggle('urgent', urgent);
+  fill.classList.toggle('urgent', urgent);
+  if (urgent && !stormActive) {
+    stormActive = true;
+    document.getElementById('storm-flash').classList.add('active');
+  }
+}
+
+function updateAllTides() {
+  // Update the active viewer's tide layer
+  const viewerId = (gameMode === 'cpu') ? (players[0] && players[0].id) : (players[currentPlayerIdx] && players[currentPlayerIdx].id);
+  const tide = playerTide[viewerId] || 0;
+  const layer = document.getElementById('my-tide');
+  const stage = document.getElementById('my-grid-stage');
+  const pctEl = document.getElementById('my-tide-pct');
+  if (layer) layer.style.height = tide + '%';
+  if (stage) stage.classList.toggle('danger', tide >= 75);
+  if (pctEl) pctEl.textContent = 'Tide ' + Math.floor(tide) + '%';
+  renderTideChips();
+}
+
+function renderTideChips() {
+  const row = document.getElementById('tide-chips-row');
+  if (!row) return;
+  const acting = players[currentPlayerIdx];
+  // In CPU mode show both you + CPU. In MP mode show all players.
+  const visible = players;
+  row.innerHTML = visible.map(p => {
+    const t = playerTide[p.id] || 0;
+    const ships = Math.max(0, shipCount - p.shipsHit.size);
+    const isActive = acting && acting.id === p.id;
+    const danger = p.alive && t >= 75;
+    const cls = ['player-tide-chip'];
+    if (!p.alive) cls.push('eliminated');
+    if (danger) cls.push('danger');
+    if (isActive && p.alive) cls.push('active');
+    return `<div class="${cls.join(' ')}">
+      <div class="flex items-center gap-1.5">
+        <span class="text-base">${p.avatar || '🛟'}</span>
+        <span class="text-lav-200 text-xs font-bold truncate flex-1">${escapeHtml(p.name)}</span>
+        <span class="text-[10px] ${danger ? 'text-rose-300' : 'text-cyan-300'}">${Math.floor(t)}%</span>
+      </div>
+      <div class="player-tide-bar"><div style="width:${t}%"></div></div>
+      <div class="text-[10px] text-lav-500">${p.alive ? ships + ' ship' + (ships===1?'':'s') : '💀 sunk'}</div>
+    </div>`;
+  }).join('');
+}
+
+function checkTideOverflow() {
+  // Any player whose tide hits 100% loses their remaining ships.
+  let anyDrowned = false;
+  players.forEach(p => {
+    if (!p.alive) return;
+    if ((playerTide[p.id] || 0) >= 100) {
+      // Sink everything they have left
+      p.placements.forEach(c => p.shipsHit.add(c));
+      p.alive = false;
+      anyDrowned = true;
+      showElimToast(p.name + ' drowned by the tide!');
+      sfxElim();
+    }
+  });
+  if (anyDrowned) {
+    const alive = players.filter(p => p.alive);
+    if (alive.length <= 1) {
+      stopMatchTimer();
+      setTimeout(() => endGame(alive[0] ? alive[0].id : null), 1300);
+    } else {
+      // Re-render so the eliminated chip + target chips update
+      if (document.getElementById('screen-battle').classList.contains('active')) renderBattleScreen();
+    }
+  }
+}
+
+function timeUp() {
+  stopMatchTimer();
+  // Sink all surviving ships dramatically; winner is whoever has most hits scored (then fewest misses).
+  players.forEach(p => {
+    if (!p.alive) return;
+    p.placements.forEach(c => p.shipsHit.add(c));
+    p.alive = false;
+  });
+  showElimToast("Time's up — the tide swallows the seas!");
+  const ranked = [...players].sort((a, b) => {
+    const ah = Object.values(myHits[a.id] || {}).reduce((s, x) => s + x, 0);
+    const bh = Object.values(myHits[b.id] || {}).reduce((s, x) => s + x, 0);
+    if (bh !== ah) return bh - ah;
+    return (myMisses[a.id] || 0) - (myMisses[b.id] || 0);
+  });
+  setTimeout(() => endGame(ranked[0] ? ranked[0].id : null), 1500);
+}
+
+function applyHitTideRetreat(attackerId) {
+  playerTide[attackerId] = Math.max(0, (playerTide[attackerId] || 0) - TIDE_HIT_RETREAT);
+  updateAllTides();
+}
+
+// ════════════════════ PAUSE ════════════════════
+function togglePause() {
+  isPaused = !isPaused;
+  const ov = document.getElementById('pause-overlay');
+  if (isPaused) {
+    ov.classList.remove('hidden');
+    sfxClick();
+  } else {
+    ov.classList.add('hidden');
+    sfxClick();
+  }
+}
+
+function quitGame() {
+  stopMatchTimer();
+  isPaused = false;
+  document.getElementById('pause-overlay').classList.add('hidden');
+  document.getElementById('storm-flash').classList.remove('active');
+  stormActive = false;
+  goToMenu();
+}
+
+// ════════════════════ OCEAN PARTICLES ════════════════════
+function seedOceanParticles(count = 22) {
+  const c = document.getElementById('ocean-particles');
+  c.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'ocean-particle';
+    const size = 2 + Math.random() * 4;
+    el.style.cssText = `
+      left:${Math.random()*100}vw;
+      bottom:${-Math.random()*30}vh;
+      width:${size}px;height:${size}px;
+      animation-duration:${10+Math.random()*16}s;
+      animation-delay:${-Math.random()*16}s;
+      opacity:${0.3+Math.random()*0.5};
+    `;
+    c.appendChild(el);
+  }
+}
+
+// ════════════════════ SOUND (Web Audio API) ════════════════════
+let _audioCtx = null;
+function audioCtx() {
+  if (!_audioCtx) {
+    try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch (e) { return null; }
+  }
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+function playTone({ freq = 440, type = 'sine', dur = 0.12, vol = 0.15, slideTo = null, attack = 0.005, release = null }) {
+  if (!soundEnabled) return;
+  const ctx = audioCtx();
+  if (!ctx) return;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, ctx.currentTime);
+  if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, ctx.currentTime + dur);
+  const rel = release == null ? dur * 0.7 : release;
+  g.gain.setValueAtTime(0, ctx.currentTime);
+  g.gain.linearRampToValueAtTime(vol, ctx.currentTime + attack);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+  o.connect(g); g.connect(ctx.destination);
+  o.start();
+  o.stop(ctx.currentTime + dur + 0.02);
+}
+
+function playNoiseBurst({ dur = 0.25, vol = 0.18, filterFreq = 800 }) {
+  if (!soundEnabled) return;
+  const ctx = audioCtx();
+  if (!ctx) return;
+  const bufferSize = Math.floor(ctx.sampleRate * dur);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = filterFreq;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+  src.connect(filter); filter.connect(g); g.connect(ctx.destination);
+  src.start();
+}
+
+function sfxClick()  {
+  // Soft water-bubble blip — sine wave sweep, no square-wave pop.
+  playTone({ freq: 1100, type: 'sine', dur: 0.07, vol: 0.06, slideTo: 520, attack: 0.008 });
+}
+function sfxFire()   { playNoiseBurst({ dur: 0.22, vol: 0.1, filterFreq: 1800 }); }
+function sfxHit()    {
+  // Splashier impact — higher-passed noise + soft sine drop instead of a sawtooth boom.
+  playNoiseBurst({ dur: 0.45, vol: 0.15, filterFreq: 1400 });
+  playTone({ freq: 380, type: 'sine', dur: 0.32, vol: 0.13, slideTo: 90 });
+}
+function sfxSink()   {
+  playTone({ freq: 420, type: 'sine', dur: 0.6, vol: 0.18, slideTo: 90 });
+  setTimeout(() => playTone({ freq: 220, type: 'sine', dur: 0.4, vol: 0.12, slideTo: 80 }), 250);
+}
+function sfxMiss()   {
+  playTone({ freq: 900, type: 'sine', dur: 0.18, vol: 0.1, slideTo: 300 });
+  setTimeout(() => playNoiseBurst({ dur: 0.15, vol: 0.06, filterFreq: 400 }), 80);
+}
+function sfxWin()    {
+  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone({ freq: f, type: 'triangle', dur: 0.25, vol: 0.18 }), i * 110));
+}
+function sfxElim()   { playTone({ freq: 140, type: 'sawtooth', dur: 0.7, vol: 0.2, slideTo: 50 }); }
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem('soundEnabled', soundEnabled);
+  updateSoundUI();
+  if (soundEnabled) sfxClick();
+}
+function updateSoundUI() {
+  document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
+  document.getElementById('sound-label').textContent = soundEnabled ? 'Sound' : 'Muted';
+}
+
+// ════════════════════ PROFILE & LEADERBOARD ════════════════════
+function saveMenuProfile() {
+  const nameEl = document.getElementById('menu-name-input');
+  const name = (nameEl.value || '').trim() || 'You';
+  menuProfile.name = name;
+  localStorage.setItem('menuProfile', JSON.stringify(menuProfile));
+}
+function cycleMenuAvatar() {
+  const i = AVATARS.indexOf(menuProfile.avatar);
+  menuProfile.avatar = AVATARS[(i + 1) % AVATARS.length];
+  document.getElementById('menu-avatar-btn').textContent = menuProfile.avatar;
+  localStorage.setItem('menuProfile', JSON.stringify(menuProfile));
+  sfxClick();
+}
+
+function recordGameResult(winnerName, allPlayerStats) {
+  // allPlayerStats: [{name, avatar, hits, misses, won}]
+  allPlayerStats.forEach(s => {
+    if (!s.name || s.name === 'CPU') return;
+    const key = s.name.toLowerCase();
+    let entry = leaderboard.find(e => e.key === key);
+    if (!entry) {
+      entry = { key, name: s.name, avatar: s.avatar, wins: 0, losses: 0, hits: 0, misses: 0, games: 0 };
+      leaderboard.push(entry);
+    }
+    entry.avatar = s.avatar; // update to latest
+    entry.name = s.name;
+    entry.games++;
+    entry.hits += s.hits;
+    entry.misses += s.misses;
+    if (s.won) entry.wins++; else entry.losses++;
+  });
+  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+}
+
+function openLeaderboard() {
+  renderLeaderboard();
+  showScreen('leaders');
+  sfxClick();
+}
+function clearLeaderboard() {
+  if (!confirm('Reset all leaderboard stats?')) return;
+  leaderboard = [];
+  localStorage.removeItem('leaderboard');
+  renderLeaderboard();
+}
+function renderLeaderboard() {
+  const list = document.getElementById('leader-list');
+  const sorted = [...leaderboard].sort((a, b) => (b.wins - a.wins) || (b.hits - a.hits) || (a.misses - b.misses));
+  if (sorted.length === 0) {
+    list.innerHTML = `<div class="text-center text-lav-500 italic py-12">No games played yet. Be the first captain!</div>`;
+    return;
+  }
+  list.innerHTML = sorted.slice(0, 10).map((e, i) => {
+    const acc = e.hits + e.misses > 0 ? Math.round(100 * e.hits / (e.hits + e.misses)) : 0;
+    const medal = ['🥇','🥈','🥉'][i] || `<span class="text-lav-500 font-bold">#${i+1}</span>`;
+    return `<div class="flex items-center gap-3 bg-lav-900/60 border border-lav-700/40 rounded-xl p-3">
+      <div class="text-2xl w-8 text-center">${medal}</div>
+      <div class="text-3xl">${e.avatar || '🦈'}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-lav-200 font-bold truncate">${escapeHtml(e.name)}</div>
+        <div class="text-lav-500 text-xs">${e.games} game${e.games===1?'':'s'} • ${acc}% accuracy</div>
+      </div>
+      <div class="text-right">
+        <div class="text-lav-200 font-bold">${e.wins}W</div>
+        <div class="text-lav-500 text-xs">${e.losses}L</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ════════════════════ AI ════════════════════
+function selectDifficulty(d, btn) {
+  aiDifficulty = d;
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  sfxClick();
+}
+
+function adjacentCoords(coord) {
+  const c = coord[0];
+  const r = parseInt(coord.slice(1));
+  const ci = COLS.indexOf(c);
+  const out = [];
+  if (ci > 0) out.push(COLS[ci-1] + r);
+  if (ci < COLS.length - 1) out.push(COLS[ci+1] + r);
+  if (r > 1) out.push(c + (r - 1));
+  if (r < ROWS[ROWS.length-1]) out.push(c + (r + 1));
+  return out;
+}
+
+function aiPickAttack(meId, targetId, difficulty) {
+  const tried = attackHistory[meId][targetId];
+  const available = COORDS.filter(c => !tried.includes(c));
+  if (available.length === 0) return null;
+  const target = players.find(p => p.id === targetId);
+  const hitsByMe = tried.filter(c => target.placements.includes(c));
+
+  if (difficulty === 'easy') {
+    return available[Math.floor(Math.random() * available.length)];
+  }
+
+  // Medium & Hard: chase neighbours of recent hits first (treats each hit as a clue)
+  const hotCandidates = [];
+  for (const hit of hitsByMe) {
+    for (const adj of adjacentCoords(hit)) {
+      if (available.includes(adj) && !hotCandidates.includes(adj)) hotCandidates.push(adj);
+    }
+  }
+  if (hotCandidates.length > 0 && Math.random() < (difficulty === 'hard' ? 0.95 : 0.7)) {
+    return hotCandidates[Math.floor(Math.random() * hotCandidates.length)];
+  }
+
+  if (difficulty === 'hard') {
+    // Probability hunting: prefer cells on a parity grid (checkerboard) that haven't been tried
+    const parity = available.filter(c => {
+      const ci = COLS.indexOf(c[0]);
+      const r = parseInt(c.slice(1)) - 1;
+      return ((ci + r) % 2) === 0;
+    });
+    const pool = parity.length > 0 ? parity : available;
+    // Slight center bias
+    const centers = ['B2','C2','D2','B3','C3','D3','B4','C4','D4'];
+    const centerPool = pool.filter(c => centers.includes(c));
+    if (centerPool.length > 0 && Math.random() < 0.5) return centerPool[Math.floor(Math.random() * centerPool.length)];
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  // Medium fallback: random with slight center bias
+  const centers = ['B2','C2','D2','B3','C3','D3','B4','C4','D4'];
+  const centerAvail = available.filter(c => centers.includes(c));
+  if (centerAvail.length > 0 && Math.random() < 0.35) return centerAvail[Math.floor(Math.random() * centerAvail.length)];
+  return available[Math.floor(Math.random() * available.length)];
+}
+
+// ════════════════════ THEME ════════════════════
+function applyTheme(themeId) {
+  let t = THEMES.find(x => x.id === themeId);
+  if (!t || !isThemeUnlocked(t)) t = THEMES[0];
+  currentTheme = t.id;
+  document.body.setAttribute('data-theme', t.id);
+  localStorage.setItem('theme', t.id);
+  updateThemeMenuLabel();
+  if (document.getElementById('screen-themes').classList.contains('active')) renderThemeGrid();
+}
+
+function isThemeUnlocked(theme) {
+  return pvpGamesCompleted >= theme.requires;
+}
+
+function updateThemeMenuLabel() {
+  const t = THEMES.find(x => x.id === currentTheme);
+  document.getElementById('theme-menu-stat').textContent = '— ' + (t ? t.name : 'Lavender');
+}
+
+function openThemes() {
+  renderThemeGrid();
+  document.getElementById('pvp-counter').textContent = pvpGamesCompleted;
+  document.getElementById('themes-pvp-counter').textContent = pvpGamesCompleted;
+  showScreen('themes');
+}
+
+function renderThemeGrid() {
+  const grid = document.getElementById('theme-grid');
+  grid.innerHTML = THEMES.map(t => {
+    const unlocked = isThemeUnlocked(t);
+    const selected = t.id === currentTheme;
+    const swatches = t.hexes.map(h => `<div style="background:${h}" class="w-6 h-6 rounded-md border border-white/10"></div>`).join('');
+    const needed = Math.max(0, t.requires - pvpGamesCompleted);
+    return `
+      <div class="theme-card ${unlocked ? '' : 'locked'} ${selected ? 'selected' : ''} bg-lav-900/60 border border-lav-700/40 rounded-2xl p-4"
+           onclick="${unlocked ? `applyTheme('${t.id}')` : ''}">
+        <div class="theme-card-inner">
+          <div class="text-3xl mb-2 text-center">${t.emoji}</div>
+          <p class="text-lav-200 font-bold text-sm text-center mb-3">${t.name}</p>
+          <div class="flex justify-center gap-1 mb-2">${swatches}</div>
+        </div>
+        ${unlocked
+          ? `<p class="text-center text-xs ${selected ? 'text-lav-300 font-bold' : 'text-lav-500'} mt-2">${selected ? '✓ Active' : 'Tap to select'}</p>`
+          : `<div class="absolute inset-0 flex flex-col items-center justify-center bg-lav-950/70 backdrop-blur-sm rounded-2xl">
+              <div class="text-3xl mb-1">🔒</div>
+              <p class="text-lav-300 text-xs font-bold">${needed} more PvP game${needed===1?'':'s'}</p>
+              <p class="text-lav-500 text-[10px] mt-1">Need ${t.requires} total</p>
+            </div>`}
+      </div>`;
+  }).join('');
+}
+
+// ════════════════════ SCREENS ════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function goToMenu() {
+  stopMatchTimer();
+  document.getElementById('storm-flash').classList.remove('active');
+  stormActive = false;
+  document.getElementById('pause-overlay').classList.add('hidden');
+  isPaused = false;
+  document.getElementById('pvp-counter').textContent = pvpGamesCompleted;
+  showScreen('menu');
+}
+
+function restartGame() {
+  // Quick replay with same settings
+  startSetup();
+}
+
+// ════════════════════ MENU ════════════════════
+function selectMode(m) {
+  gameMode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.remove('border-lav-600','bg-lav-600/30','text-white');
+    b.classList.add('border-lav-800/60','bg-lav-900/40','text-lav-300');
+  });
+  const btn = document.getElementById('mode-' + m);
+  btn.classList.remove('border-lav-800/60','bg-lav-900/40','text-lav-300');
+  btn.classList.add('border-lav-600','bg-lav-600/30','text-white');
+  document.getElementById('player-count-box').style.display = m === 'mp' ? '' : 'none';
+  document.getElementById('ai-diff-box').style.display = m === 'cpu' ? '' : 'none';
+  document.getElementById('menu-profile-box').style.display = m === 'cpu' ? '' : 'none';
+  sfxClick();
+}
+
+function selectPlayerCount(n, btn) {
+  numPlayers = n;
+  document.querySelectorAll('#player-count-box .pick-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('player-count-label').textContent = n + ' players';
+}
+
+function selectShipCount(n, btn) {
+  shipCount = n;
+  btn.parentElement.querySelectorAll('.pick-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('ship-count-label').textContent = n + ' ships';
+}
+
+function startSetup() {
+  if (gameMode === 'cpu') saveMenuProfile();
+  const total = gameMode === 'cpu' ? 2 : numPlayers;
+  players = [];
+  for (let i = 1; i <= total; i++) {
+    let name, avatar;
+    if (gameMode === 'cpu') {
+      if (i === 1) { name = menuProfile.name; avatar = menuProfile.avatar; }
+      else { name = 'CPU'; avatar = '🤖'; }
+    } else {
+      name = 'Player ' + i;
+      avatar = AVATARS[(i - 1) % AVATARS.length];
+    }
+    players.push({
+      id: i,
+      name,
+      avatar,
+      isCPU: gameMode === 'cpu' && i === 2,
+      placements: [],
+      shipsHit: new Set(),
+      alive: true,
+    });
+  }
+  attackHistory = {};
+  myHits = {};
+  myMisses = {};
+  players.forEach(p => {
+    attackHistory[p.id] = {};
+    myHits[p.id] = {};
+    myMisses[p.id] = 0;
+    players.forEach(q => {
+      if (q.id !== p.id) {
+        attackHistory[p.id][q.id] = [];
+        myHits[p.id][q.id] = 0;
+      }
+    });
+  });
+
+  placementIdx = 0;
+  attackInProgress = false;
+  beginPlacementForCurrent();
+}
+
+// ════════════════════ PLACEMENT ════════════════════
+function beginPlacementForCurrent() {
+  const player = players[placementIdx];
+  if (player.isCPU) {
+    // Auto-place CPU
+    const cpu = new Set();
+    while (cpu.size < shipCount) cpu.add(COORDS[Math.floor(Math.random() * COORDS.length)]);
+    player.placements = [...cpu];
+    advancePlacement();
+    return;
+  }
+  placingArr = [];
+  showPlacementScreen(player);
+  showScreen('place');
+}
+
+function showPlacementScreen(player) {
+  document.getElementById('place-title').textContent = player.name + ' — Hide Your Fleet';
+  document.getElementById('place-needed').textContent = shipCount;
+  updatePlacePips([]);
+  buildPlaceGrid();
+  document.getElementById('place-selected-list').innerHTML = '';
+  document.getElementById('place-empty-hint').style.display = '';
+  document.getElementById('place-confirm-btn').disabled = true;
+
+  // Profile picker only for multiplayer (each player picks their own)
+  const profileBox = document.getElementById('place-profile-box');
+  if (gameMode === 'mp') {
+    profileBox.style.display = '';
+    renderPlaceAvatarGrid(player);
+    document.getElementById('place-avatar-display').textContent = player.avatar;
+    document.getElementById('place-name-input').value = player.name;
+  } else {
+    profileBox.style.display = 'none';
+  }
+}
+
+function renderPlaceAvatarGrid(player) {
+  const grid = document.getElementById('place-avatar-grid');
+  grid.innerHTML = AVATARS.map(a =>
+    `<div class="avatar-pick ${a === player.avatar ? 'selected' : ''}" onclick="pickPlaceAvatar('${a}')">${a}</div>`
+  ).join('');
+}
+
+function pickPlaceAvatar(emoji) {
+  const player = players[placementIdx];
+  player.avatar = emoji;
+  document.getElementById('place-avatar-display').textContent = emoji;
+  renderPlaceAvatarGrid(player);
+  sfxClick();
+}
+
+function buildPlaceGrid() {
+  document.getElementById('place-grid-wrap').innerHTML = buildGridHTML('place', false, [], []);
+  document.querySelectorAll('#place-grid-wrap .grid-cell').forEach(cell => {
+    cell.onclick = () => togglePlaceCell(cell.dataset.coord);
+  });
+}
+
+function togglePlaceCell(coord) {
+  const idx = placingArr.indexOf(coord);
+  if (idx > -1) {
+    placingArr.splice(idx, 1);
+  } else {
+    if (placingArr.length >= shipCount) return;
+    placingArr.push(coord);
+  }
+  sfxClick();
+  refreshPlaceGrid();
+}
+
+function refreshPlaceGrid() {
+  document.querySelectorAll('#place-grid-wrap .grid-cell').forEach(cell => {
+    const coord = cell.dataset.coord;
+    const sel = placingArr.includes(coord);
+    cell.innerHTML = buildShipInner(coord, sel ? 'selected' : 'default', false);
+    if (sel) {
+      cell.style.background = 'rgb(var(--lav-600) / .35)';
+      cell.style.borderColor = 'rgb(var(--lav-500) / .7)';
+      cell.style.boxShadow = '0 0 14px rgb(var(--lav-600) / .5)';
+    } else {
+      cell.style.background = '';
+      cell.style.borderColor = '';
+      cell.style.boxShadow = '';
+    }
+  });
+  updatePlacePips(placingArr);
+  const listEl = document.getElementById('place-selected-list');
+  listEl.innerHTML = placingArr.map(c =>
+    `<span class="bg-lav-700/60 border border-lav-500/50 text-lav-200 text-xs font-bold px-2 py-0.5 rounded-lg animate-pop-in">${c}</span>`
+  ).join('');
+  document.getElementById('place-empty-hint').style.display = placingArr.length ? 'none' : '';
+  document.getElementById('place-confirm-btn').disabled = placingArr.length < shipCount;
+}
+
+function updatePlacePips(arr) {
+  const el = document.getElementById('place-pips');
+  el.innerHTML = Array.from({length: shipCount}, (_,i) =>
+    `<div class="w-3 h-3 rounded-full transition-all duration-300 ${i < arr.length ? 'bg-lav-400 shadow-[0_0_8px_rgb(var(--lav-500)/.8)]' : 'bg-lav-800 border border-lav-700'}"></div>`
+  ).join('');
+}
+
+function clearPlacement() {
+  placingArr = [];
+  refreshPlaceGrid();
+}
+
+function confirmPlacement() {
+  if (placingArr.length < shipCount) return;
+  const player = players[placementIdx];
+  player.placements = [...placingArr];
+  if (gameMode === 'mp') {
+    const nameEl = document.getElementById('place-name-input');
+    const n = (nameEl.value || '').trim();
+    if (n) player.name = n;
+  }
+  sfxClick();
+  advancePlacement();
+}
+
+function advancePlacement() {
+  const justPlaced = players[placementIdx];
+  placementIdx++;
+  if (placementIdx >= players.length) {
+    // All placements done — start battle, but first pass the device to the first attacker
+    // if the player who just placed isn't the same human who's about to attack.
+    currentPlayerIdx = 0;
+    selectedTargetId = null;
+    roundNum = 1;
+    actionsThisRound = 0;
+    const firstAttacker = players[0];
+    const needPass = !justPlaced.isCPU && !firstAttacker.isCPU && justPlaced.id !== firstAttacker.id;
+    if (needPass) {
+      showPassOverlay('Hand it to ' + firstAttacker.name, () => startBattle());
+    } else {
+      // Even in CPU mode, briefly wipe placement DOM before showing battle
+      wipeBattleDOM();
+      startBattle();
+    }
+    return;
+  }
+  // If next placer is CPU, auto-place. Otherwise pass the device.
+  const nextPlayer = players[placementIdx];
+  if (nextPlayer.isCPU) {
+    beginPlacementForCurrent();
+  } else {
+    showPassOverlay('Hand it to ' + nextPlayer.name, () => beginPlacementForCurrent());
+  }
+}
+
+// ════════════════════ PASS OVERLAY ════════════════════
+let passCallback = null;
+function wipeBattleDOM() {
+  // Remove any ship/hit info from the DOM so inspect-element can't reveal previous player's data.
+  const myWrap = document.getElementById('my-grid-wrap');
+  const atkWrap = document.getElementById('attack-grid-wrap');
+  if (myWrap) myWrap.innerHTML = '';
+  if (atkWrap) atkWrap.innerHTML = '';
+  // Also wipe placement grid in case we're between placement turns
+  const placeWrap = document.getElementById('place-grid-wrap');
+  if (placeWrap) placeWrap.innerHTML = '';
+  const selList = document.getElementById('place-selected-list');
+  if (selList) selList.innerHTML = '';
+  const targetChips = document.getElementById('target-chips');
+  if (targetChips) targetChips.innerHTML = '';
+}
+function showPassOverlay(msg, cb) {
+  passCallback = cb;
+  wipeBattleDOM();
+  document.getElementById('pass-to-text').textContent = msg;
+  document.getElementById('pass-overlay').classList.remove('hidden');
+  sfxClick();
+}
+function dismissPass() {
+  document.getElementById('pass-overlay').classList.add('hidden');
+  sfxClick();
+  if (passCallback) { const cb = passCallback; passCallback = null; cb(); }
+}
+
+// ════════════════════ GRID BUILDER ════════════════════
+function buildGridHTML(prefix, isAttack, hiddenCoords, attackedCoords) {
+  const cellSize = 'w-10 h-10 sm:w-11 sm:h-11';
+  let html = `<div class="inline-block">`;
+  html += `<div class="flex">`;
+  html += `<div class="${cellSize}"></div>`;
+  COLS.forEach(c => {
+    html += `<div class="${cellSize} flex items-center justify-center text-xs font-bold text-lav-400 font-display">${c}</div>`;
+  });
+  html += `</div>`;
+  ROWS.forEach(r => {
+    html += `<div class="flex">`;
+    html += `<div class="${cellSize} flex items-center justify-center text-xs font-bold text-lav-400 font-display">${r}</div>`;
+    COLS.forEach(c => {
+      const coord = c + r;
+      const wasAttacked = attackedCoords.includes(coord);
+      const isHidden = hiddenCoords.includes(coord);
+      const isHit = wasAttacked && isHidden;
+      const isMiss = wasAttacked && !isHidden;
+      let state = 'default';
+      if (isHit) state = 'hit';
+      else if (isMiss) state = 'miss';
+      else if (!isAttack && isHidden) state = 'hidden';
+      const disabled = (isAttack && wasAttacked) ? 'used disabled' : (isAttack ? '' : 'disabled');
+      const stateClass = isHit ? 'cell-sunk' : (isMiss ? 'cell-missed' : '');
+      html += `<div class="grid-cell ${cellSize} m-0.5 border border-lav-700/40 bg-lav-900/60 ${disabled} ${stateClass}"
+        data-coord="${coord}" data-prefix="${prefix}" id="${prefix}-cell-${coord}">
+        ${buildShipInner(coord, state, isAttack)}
+        <div class="water-splash"></div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function buildShipInner(coord, state, isAttack) {
+  const emoji = getShipEmoji(coord);
+  if (state === 'hit') {
+    return `<div class="w-full h-full flex items-center justify-center"><div class="sunk-ring"></div></div>`;
+  }
+  if (state === 'miss') {
+    return `<div class="w-full h-full flex items-center justify-center relative">
+      <span class="text-base opacity-25">${emoji}</span>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span style="font-size:14px;color:rgb(var(--lav-300) / .8);font-weight:900">✕</span>
+      </div>
+    </div>`;
+  }
+  if (state === 'hidden') {
+    return `<div class="w-full h-full flex items-center justify-center relative">
+      <span class="ship-svg text-lg">${emoji}</span>
+      <div class="absolute -top-1 -right-1 w-3 h-3 bg-lav-500 rounded-full border border-lav-300"></div>
+    </div>`;
+  }
+  if (state === 'selected') {
+    return `<div class="w-full h-full flex items-center justify-center">
+      <span class="ship-svg text-lg animate-float">${emoji}</span>
+    </div>`;
+  }
+  return `<div class="w-full h-full flex items-center justify-center">
+    <span class="ship-svg text-base ${isAttack ? 'opacity-50' : 'opacity-70'}">${emoji}</span>
+  </div>`;
+}
+
+function getShipEmoji(coord) {
+  return SHIP_EMOJIS[COORDS.indexOf(coord) % SHIP_EMOJIS.length];
+}
+
+// ════════════════════ BATTLE ════════════════════
+function startBattle() {
+  showScreen('battle');
+  // Skip eliminated players (shouldn't be any at start)
+  while (!players[currentPlayerIdx].alive) {
+    currentPlayerIdx = (currentPlayerIdx + 1) % players.length;
+  }
+  startMatchTimer();
+  beginTurn();
+}
+
+function beginTurn() {
+  const me = players[currentPlayerIdx];
+
+  // Pick default target (first living opponent)
+  const opps = livingOpponents(me.id);
+  if (opps.length === 0) {
+    endGame(me.id);
+    return;
+  }
+  if (!selectedTargetId || !players.find(p => p.id === selectedTargetId && p.alive) || selectedTargetId === me.id) {
+    selectedTargetId = opps[0].id;
+  }
+
+  if (me.isCPU) {
+    renderBattleScreen();
+    setTimeout(() => cpuTakeTurn(), 1100);
+  } else {
+    renderBattleScreen();
+  }
+}
+
+function livingOpponents(myId) {
+  return players.filter(p => p.id !== myId && p.alive);
+}
+
+function renderBattleScreen() {
+  const acting = players[currentPlayerIdx];
+  // In CPU mode, the human always sees their own view. In MP mode, viewer == acting player.
+  const viewer = gameMode === 'cpu' ? players[0] : acting;
+  // Target the viewer attacks. In CPU mode when CPU is acting, keep the viewer's selectedTargetId (the CPU).
+  let viewerTargetId = selectedTargetId;
+  if (gameMode === 'cpu') {
+    viewerTargetId = players.find(p => p.id !== viewer.id).id;
+  }
+  const target = players.find(p => p.id === viewerTargetId);
+
+  document.getElementById('turn-label').textContent = acting.name + "'s Turn";
+  document.getElementById('round-label').textContent = 'Round ' + roundNum;
+  document.getElementById('my-grid-label').textContent = viewer.name + "'s Fleet";
+  document.getElementById('attack-grid-label').textContent = 'Attack ' + (target ? target.name : '');
+
+  // Stats (always for viewer)
+  const totalViewerHits = Object.values(myHits[viewer.id]).reduce((a,b) => a+b, 0);
+  document.getElementById('stat-hits').textContent = totalViewerHits;
+  document.getElementById('stat-misses').textContent = myMisses[viewer.id];
+  document.getElementById('stat-remain').textContent = shipCount - viewer.shipsHit.size;
+
+  // Target chips — show only when the viewer is the actor and has >1 opponent
+  const targetRow = document.getElementById('target-row');
+  const showChips = (viewer.id === acting.id) && players.filter(p => p.id !== viewer.id).length > 1;
+  if (!showChips) {
+    targetRow.classList.add('hidden');
+  } else {
+    targetRow.classList.remove('hidden');
+    const opps = players.filter(p => p.id !== viewer.id);
+    const chips = opps.map(p => {
+      const rem = shipCount - p.shipsHit.size;
+      const isSel = p.id === selectedTargetId;
+      const elim = !p.alive;
+      return `<button class="target-chip flex items-center gap-2 px-3 py-2 rounded-xl border-2 border-lav-700/50 bg-lav-800/50 text-lav-200 text-sm font-bold ${isSel ? 'selected' : ''} ${elim ? 'eliminated' : ''}"
+                ${elim ? 'disabled' : `onclick="selectTarget(${p.id})"`}>
+                <span class="text-base">${p.avatar || PLAYER_COLORS[p.id] || ''}</span>
+                <span>${escapeHtml(p.name)}</span>
+                <span class="text-xs ${elim ? '' : 'text-lav-400'}">${elim ? '💀' : rem + '/' + shipCount}</span>
+              </button>`;
+    }).join('');
+    document.getElementById('target-chips').innerHTML = chips;
+  }
+
+  // My grid (viewer's fleet + every attack on viewer)
+  const allAttacksOnViewer = [];
+  Object.keys(attackHistory).forEach(aid => {
+    if (parseInt(aid) === viewer.id) return;
+    (attackHistory[aid][viewer.id] || []).forEach(c => {
+      if (!allAttacksOnViewer.includes(c)) allAttacksOnViewer.push(c);
+    });
+  });
+  document.getElementById('my-grid-wrap').innerHTML = buildGridHTML('my', false, viewer.placements, allAttacksOnViewer);
+
+  // Attack grid (viewer's view of target)
+  const viewerAttacksOnTarget = (attackHistory[viewer.id] && attackHistory[viewer.id][target.id]) || [];
+  document.getElementById('attack-grid-wrap').innerHTML = buildGridHTML('atk', true, target.placements, viewerAttacksOnTarget);
+
+  // Attack handlers — only when it's the viewer's turn (so viewer is the actor) and not CPU's turn
+  const hint = document.getElementById('one-shot-hint');
+  if (viewer.id === acting.id && !acting.isCPU) {
+    document.querySelectorAll('#attack-grid-wrap .grid-cell:not(.used)').forEach(cell => {
+      cell.onclick = () => doAttack(cell.dataset.coord);
+    });
+    hint.textContent = 'One shot — then pass the device.';
+    hint.classList.remove('text-amber-300');
+    hint.classList.add('text-lav-500');
+  } else {
+    // CPU is acting against the human viewer
+    hint.textContent = '🤖 CPU is taking aim...';
+    hint.classList.remove('text-lav-500');
+    hint.classList.add('text-amber-300');
+  }
+
+  updateAllTides();
+}
+
+function selectTarget(pid) {
+  const p = players.find(x => x.id === pid);
+  if (!p || !p.alive) return;
+  selectedTargetId = pid;
+  sfxClick();
+  renderBattleScreen();
+}
+
+function doAttack(coord) {
+  if (attackInProgress || isPaused) return;
+  const me = players[currentPlayerIdx];
+  const target = players.find(p => p.id === selectedTargetId);
+  if (!target || !target.alive) return;
+  const history = attackHistory[me.id][target.id];
+  if (history.includes(coord)) return;
+  attackInProgress = true;
+  history.push(coord);
+
+  sfxFire();
+  const isHit = target.placements.includes(coord);
+  const animPrefix = (gameMode === 'cpu' && me.isCPU) ? 'my' : 'atk';
+  if (isHit) {
+    myHits[me.id][target.id]++;
+    target.shipsHit.add(coord);
+    applyHitTideRetreat(me.id);
+    triggerSinkAnimation(coord, animPrefix);
+    addBattleLog(me, target, coord, true);
+    setTimeout(sfxHit, 150);
+    setTimeout(sfxSink, 600);
+  } else {
+    myMisses[me.id]++;
+    triggerMissAnimation(coord, animPrefix);
+    addBattleLog(me, target, coord, false);
+    setTimeout(sfxMiss, 100);
+  }
+
+  // Check elimination
+  let elimText = null;
+  if (target.alive && target.shipsHit.size >= shipCount) {
+    target.alive = false;
+    elimText = target.name + ' eliminated by ' + me.name + '!';
+    setTimeout(sfxElim, 1200);
+  }
+
+  const postHitDelay = isHit ? 2200 : 800;
+
+  // Check win (only one alive)
+  const alive = players.filter(p => p.alive);
+  if (alive.length <= 1) {
+    setTimeout(() => {
+      if (elimText) showElimToast(elimText);
+      setTimeout(() => { attackInProgress = false; endGame(alive[0] ? alive[0].id : me.id); }, elimText ? 1400 : 0);
+    }, postHitDelay);
+    return;
+  }
+
+  // Continue → next player
+  setTimeout(() => {
+    if (elimText) {
+      showElimToast(elimText);
+      setTimeout(() => { attackInProgress = false; advanceTurn(); }, 1500);
+    } else {
+      attackInProgress = false;
+      advanceTurn();
+    }
+  }, postHitDelay);
+}
+
+function advanceTurn() {
+  // Move to next living player
+  let next = currentPlayerIdx;
+  for (let i = 0; i < players.length; i++) {
+    next = (next + 1) % players.length;
+    if (next === 0) roundNum++;
+    if (players[next].alive) break;
+  }
+  currentPlayerIdx = next;
+
+  // Reset selected target if current player's target is dead/self
+  const me = players[currentPlayerIdx];
+  if (!selectedTargetId || selectedTargetId === me.id) {
+    const opps = livingOpponents(me.id);
+    selectedTargetId = opps[0] ? opps[0].id : null;
+  } else {
+    const t = players.find(p => p.id === selectedTargetId);
+    if (!t || !t.alive) {
+      const opps = livingOpponents(me.id);
+      selectedTargetId = opps[0] ? opps[0].id : null;
+    }
+  }
+
+  if (gameMode === 'cpu') {
+    // Same human viewer throughout — no pass overlay
+    renderBattleScreen();
+    if (me.isCPU) setTimeout(cpuTakeTurn, 1100);
+  } else if (me.isCPU) {
+    renderBattleScreen();
+    setTimeout(cpuTakeTurn, 1100);
+  } else {
+    showPassOverlay('Pass to ' + me.name, () => renderBattleScreen());
+  }
+}
+
+function cpuTakeTurn() {
+  const me = players[currentPlayerIdx];
+  const opps = livingOpponents(me.id);
+  if (opps.length === 0) { endGame(me.id); return; }
+  // Hard prefers the most-wounded opponent; easy/medium pick randomly
+  let target;
+  if (aiDifficulty === 'hard') {
+    const sorted = [...opps].sort((a, b) => b.shipsHit.size - a.shipsHit.size);
+    target = sorted[0];
+  } else {
+    target = opps[Math.floor(Math.random() * opps.length)];
+  }
+  selectedTargetId = target.id;
+  renderBattleScreen();
+  const coord = aiPickAttack(me.id, target.id, aiDifficulty);
+  if (!coord) { advanceTurn(); return; }
+  const thinkMs = aiDifficulty === 'easy' ? 1100 : aiDifficulty === 'medium' ? 750 : 500;
+  setTimeout(() => doAttack(coord), thinkMs);
+}
+
+// ════════════════════ ANIMATIONS ════════════════════
+function triggerSinkAnimation(coord, prefix = 'atk') {
+  const cell = document.getElementById(prefix + '-cell-' + coord);
+  if (!cell) return;
+  cell.classList.add('used','disabled');
+  // Allow the long wave to spill outside the cell during the animation.
+  cell.style.overflow = 'visible';
+  cell.innerHTML = `
+    <div class="relative w-full h-full flex items-center justify-center" style="overflow:visible">
+      <div class="sink-foam"></div>
+      <div class="long-wave"></div>
+      <div class="wave-crest"></div>
+      <span style="font-size:22px;display:inline-block;position:relative;z-index:2;animation:shipCollapse 1.7s cubic-bezier(.5,.05,.5,.95) forwards">${getShipEmoji(coord)}</span>
+      <div class="bubble-dot" style="left:28%;bottom:22%;animation:bubble 1.6s ease-out .4s forwards"></div>
+      <div class="bubble-dot" style="left:58%;bottom:30%;animation:bubble 1.6s ease-out .65s forwards;width:4px;height:4px"></div>
+      <div class="bubble-dot" style="left:44%;bottom:14%;animation:bubble 1.7s ease-out .9s forwards;width:5px;height:5px"></div>
+      <div class="bubble-dot" style="left:36%;bottom:42%;animation:bubble 1.5s ease-out 1.1s forwards;width:3px;height:3px"></div>
+    </div>`;
+  setTimeout(() => {
+    // Aftermath: dark sunken cell with subtle pulsing foam ring — NO water-drop emoji.
+    cell.innerHTML = `<div class="w-full h-full flex items-center justify-center"><div class="sunk-ring"></div></div>`;
+    cell.classList.add('cell-sunk');
+    cell.style.overflow = '';
+    cell.style.background = '';
+    cell.style.borderColor = '';
+  }, 1750);
+}
+
+function triggerMissAnimation(coord, prefix = 'atk') {
+  const cell = document.getElementById(prefix + '-cell-' + coord);
+  if (!cell) return;
+  cell.classList.add('cell-miss','used','disabled');
+  cell.innerHTML = `<div class="w-full h-full flex items-center justify-center relative">
+    <span class="text-base opacity-20">${getShipEmoji(coord)}</span>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span style="font-size:14px;color:rgb(var(--lav-300) / .9);font-weight:900;animation:popIn .3s ease">✕</span>
+    </div>
+  </div>`;
+  cell.style.background = 'rgb(var(--lav-600) / .08)';
+  cell.style.borderColor = 'rgb(var(--lav-600) / .3)';
+}
+
+function showElimToast(text) {
+  const t = document.getElementById('elim-toast');
+  document.getElementById('elim-toast-text').textContent = text;
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), 1400);
+}
+
+// ════════════════════ BATTLE LOG ════════════════════
+function addBattleLog(attacker, target, coord, isHit) {
+  const log = document.getElementById('battle-log');
+  if (log.querySelector('.text-lav-500.italic')) log.innerHTML = '';
+  const aMark = attacker.avatar || (attacker.isCPU ? '🤖' : '⚔️');
+  const tMark = target.avatar || (target.isCPU ? '🤖' : '');
+  const aName = escapeHtml(attacker.name);
+  const tName = escapeHtml(target.name);
+  const msg = isHit
+    ? `<span class="text-emerald-400 font-bold">${aMark} ${aName}</span> hit <span class="text-lav-200 font-bold">${tMark} ${tName}</span> at <span class="text-lav-200 font-bold">${coord}</span> — <span class="text-emerald-400 font-bold">💥 ship sinking!</span>`
+    : `<span class="text-lav-400">${aMark} ${aName}</span> fired at <span class="text-lav-300">${tMark} ${tName}</span> ${coord} — <span class="text-lav-500">miss</span>`;
+  const div = document.createElement('div');
+  div.className = 'log-entry text-xs py-1 border-b border-lav-800/40 last:border-0';
+  div.innerHTML = msg;
+  log.prepend(div);
+  while (log.children.length > 14) log.removeChild(log.lastChild);
+}
+
+// ════════════════════ WIN ════════════════════
+function endGame(winnerId) {
+  stopMatchTimer();
+  document.getElementById('storm-flash').classList.remove('active');
+  stormActive = false;
+  const winner = players.find(p => p.id === winnerId);
+  const isPvP = gameMode === 'mp';
+
+  // Record game results in leaderboard (skip CPU entries)
+  const stats = players.map(p => ({
+    name: p.name,
+    avatar: p.avatar,
+    hits: Object.values(myHits[p.id] || {}).reduce((a, b) => a + b, 0),
+    misses: myMisses[p.id] || 0,
+    won: p.id === winnerId,
+  }));
+  recordGameResult(winner ? winner.name : null, stats);
+
+  // Increment PvP counter only for multiplayer games
+  let unlockMsg = '';
+  if (isPvP) {
+    const before = pvpGamesCompleted;
+    pvpGamesCompleted++;
+    localStorage.setItem('pvpGames', pvpGamesCompleted);
+    // Check if a new theme just unlocked
+    const newlyUnlocked = THEMES.find(t => t.requires > before && t.requires <= pvpGamesCompleted);
+    if (newlyUnlocked) {
+      unlockMsg = `🔓 New theme unlocked: ${newlyUnlocked.emoji} ${newlyUnlocked.name}!`;
+    } else {
+      const next = THEMES.find(t => t.requires > pvpGamesCompleted);
+      if (next) {
+        const left = next.requires - pvpGamesCompleted;
+        unlockMsg = `Next theme in ${left} game${left===1?'':'s'}: ${next.emoji} ${next.name}`;
+      }
+    }
+  }
+
+  const isCPUWin = winner && winner.isCPU;
+  document.getElementById('win-title').textContent = winner
+    ? (winner.name + ' Wins!')
+    : 'Time Out — No Survivors';
+  document.getElementById('win-subtitle').textContent = winner
+    ? (isCPUWin ? 'The CPU dominated the seas...' : `${winner.name} held the tide and sank the fleet!`)
+    : 'The ocean claimed every fleet.';
+  const totalHits = winner ? Object.values(myHits[winner.id] || {}).reduce((a,b) => a+b, 0) : 0;
+  const totalMisses = winner ? (myMisses[winner.id] || 0) : 0;
+  const acc = (totalHits + totalMisses) > 0 ? Math.round(100 * totalHits / (totalHits + totalMisses)) : 0;
+  document.getElementById('win-stat-hits').textContent = totalHits;
+  document.getElementById('win-stat-acc').textContent = acc + '%';
+  document.getElementById('win-stat-time').textContent = formatTime(matchTimeLeft);
+  // Survivors snapshot
+  const survEl = document.getElementById('win-survivors');
+  const allRanked = [...players].sort((a, b) => {
+    const ah = Object.values(myHits[a.id] || {}).reduce((s, x) => s + x, 0);
+    const bh = Object.values(myHits[b.id] || {}).reduce((s, x) => s + x, 0);
+    if (b.alive !== a.alive) return b.alive - a.alive;
+    return bh - ah;
+  });
+  survEl.innerHTML = `<div class="space-y-1 mt-1">
+    ${allRanked.map(p => {
+      const ph = Object.values(myHits[p.id] || {}).reduce((s, x) => s + x, 0);
+      const ships = Math.max(0, shipCount - p.shipsHit.size);
+      const isW = winner && p.id === winner.id;
+      return `<div class="flex items-center gap-2 px-2 py-1 rounded-lg ${isW ? 'bg-lav-700/40 border border-lav-500/50' : 'bg-lav-950/40'}">
+        <span class="text-lg">${p.avatar || '🛟'}</span>
+        <span class="text-xs ${isW ? 'text-lav-100 font-bold' : 'text-lav-300'} flex-1 truncate">${escapeHtml(p.name)}${isW ? ' 👑' : ''}</span>
+        <span class="text-[10px] text-emerald-300">${ph} hit${ph===1?'':'s'}</span>
+        <span class="text-[10px] ${p.alive ? 'text-cyan-300' : 'text-rose-300/80'}">${p.alive ? ships + ' alive' : '💀 sunk'}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+  document.getElementById('win-trophy').textContent = isCPUWin ? '💀' : (winner ? winner.avatar : '🌊');
+
+  const unlockEl = document.getElementById('win-unlock');
+  if (unlockMsg) {
+    unlockEl.textContent = unlockMsg;
+    unlockEl.classList.remove('hidden');
+  } else {
+    unlockEl.classList.add('hidden');
+  }
+
+  showScreen('win');
+  if (!isCPUWin) { launchConfetti(); sfxWin(); } else { sfxElim(); }
+}
+
+// ════════════════════ CONFETTI ════════════════════
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  const colors = ['#b8a4ff','#9b7ee8','#7c5cbf','#d4c9ff','#e9e3ff','#f0c0ff','#80a0ff','#c0f0ff'];
+  for (let i = 0; i < 160; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random()*100}vw;
+      top: -20px;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      width: ${6+Math.random()*8}px;
+      height: ${6+Math.random()*10}px;
+      border-radius: ${Math.random()>0.5?'50%':'2px'};
+      animation: confettiFall ${2+Math.random()*3}s linear ${Math.random()*2}s forwards;
+    `;
+    container.appendChild(el);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 7000);
+}
+
+// ════════════════════ INIT ════════════════════
+applyTheme(currentTheme);
+selectMode('mp');
+selectPlayerCount(3, document.querySelector('#player-count-box .pick-btn[data-count="3"]'));
+document.getElementById('pvp-counter').textContent = pvpGamesCompleted;
+updateThemeMenuLabel();
+updateSoundUI();
+seedOceanParticles();
+// Hydrate profile UI
+document.getElementById('menu-name-input').value = menuProfile.name;
+document.getElementById('menu-avatar-btn').textContent = menuProfile.avatar;
+document.getElementById('menu-name-input').addEventListener('blur', saveMenuProfile);
+document.getElementById('menu-name-input').addEventListener('change', saveMenuProfile);
+// Keyboard shortcut: spacebar toggles pause during battle
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && document.getElementById('screen-battle').classList.contains('active')) {
+    e.preventDefault();
+    togglePause();
+  }
+});
+// Unlock audio on first user interaction (browser autoplay policy)
+window.addEventListener('pointerdown', () => audioCtx(), { once: true });
+</script>
+</body>
+</html>
