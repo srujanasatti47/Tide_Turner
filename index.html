@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tide Turner</title>
+<link rel="icon" type="image/jpeg" href="logo_tt.jpeg">
+<link rel="apple-touch-icon" href="logo_tt.jpeg">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
@@ -276,25 +278,100 @@ tailwind.config = {
     background: rgb(var(--lav-950));
     color: rgb(var(--lav-200));
     transition: background-color .4s ease, color .4s ease;
+    overflow-x: hidden;
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --pointer-x: 50%;
+    --pointer-y: 35%;
   }
 
   .bg-deep {
     background:
+      radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgb(var(--lav-300) / .14), transparent 24rem),
       radial-gradient(ellipse at 30% 20%, rgb(var(--theme-grad-a) / .5) 0%, transparent 60%),
       radial-gradient(ellipse at 70% 80%, rgb(var(--theme-grad-b) / .6) 0%, transparent 50%),
       rgb(var(--lav-950));
   }
 
+  .ambient-3d {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    perspective: 900px;
+  }
+  .ambient-3d::before {
+    content: '';
+    position: absolute;
+    inset: -18%;
+    background-image:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 72px 72px;
+    transform: rotateX(68deg) translateY(18%) translateZ(-130px);
+    transform-origin: center bottom;
+    opacity: .28;
+    animation: driftGrid 18s linear infinite;
+  }
+  .orbital-glow {
+    position: absolute;
+    width: 38rem;
+    height: 38rem;
+    left: 50%;
+    top: 18%;
+    transform: translate3d(-50%, -50%, -220px);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, rgb(var(--lav-300) / .18), transparent 58%),
+      conic-gradient(from 90deg, transparent, rgb(var(--lav-400) / .18), transparent, rgb(var(--lav-600) / .16), transparent);
+    filter: blur(.5px);
+    animation: slowSpin 28s linear infinite;
+  }
+  .wave-plane {
+    position: absolute;
+    left: -15%;
+    right: -15%;
+    bottom: -8%;
+    height: 28vh;
+    border-radius: 50% 50% 0 0;
+    transform: rotateX(62deg) translateZ(-40px);
+    transform-origin: center bottom;
+    background:
+      repeating-radial-gradient(ellipse at center, rgba(125,211,252,.22) 0 2px, transparent 3px 22px),
+      linear-gradient(180deg, rgba(125,211,252,.12), rgba(14,165,233,.28));
+    box-shadow: 0 -20px 80px rgba(56,189,248,.18);
+    animation: waveDrift 8s ease-in-out infinite alternate;
+  }
+  .wave-plane.back {
+    bottom: 8%;
+    opacity: .35;
+    transform: rotateX(66deg) translateZ(-180px) scale(1.18);
+    animation-duration: 11s;
+  }
+  @keyframes driftGrid {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 72px 72px, 72px 72px; }
+  }
+  @keyframes waveDrift {
+    from { translate: -2% 0; filter: hue-rotate(0deg); }
+    to { translate: 2% -2%; filter: hue-rotate(10deg); }
+  }
+  @keyframes slowSpin {
+    to { rotate: 360deg; }
+  }
+
   .grid-cell {
     position: relative;
     cursor: pointer;
-    transition: transform .15s, background .15s, box-shadow .15s;
+    transition: transform .18s, background .18s, box-shadow .18s, border-color .18s;
     border-radius: 8px;
     overflow: hidden;
+    transform-style: preserve-3d;
   }
   .grid-cell:hover:not(.used):not(.disabled) {
-    transform: scale(1.1);
-    box-shadow: 0 0 16px rgb(var(--lav-500) / .6);
+    transform: translateZ(18px) rotateX(10deg) rotateY(-8deg) scale(1.08);
+    box-shadow: 0 14px 28px rgb(var(--lav-950) / .45), 0 0 18px rgb(var(--lav-500) / .72);
     z-index: 10;
   }
   .grid-cell:active:not(.used):not(.disabled) { transform: scale(.94); }
@@ -338,10 +415,67 @@ tailwind.config = {
   .screen { display: none; }
   .screen.active { display: flex; }
 
+  .brand-logo {
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid rgb(var(--lav-300) / .35);
+    box-shadow: 0 0 22px rgb(var(--lav-600) / .35);
+  }
+
+  .logo-orbit {
+    position: relative;
+    width: 9.5rem;
+    height: 9.5rem;
+    margin: 0 auto 1rem;
+    display: grid;
+    place-items: center;
+    perspective: 900px;
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transition: transform .18s ease-out;
+  }
+  .logo-orbit .brand-logo {
+    width: 8.5rem;
+    height: 8.5rem;
+    border-radius: 999px;
+    transform: translateZ(42px);
+    animation: logoBreathe 4s ease-in-out infinite;
+  }
+  .logo-orbit::before,
+  .logo-orbit::after {
+    content: '';
+    position: absolute;
+    inset: .35rem;
+    border-radius: 50%;
+    border: 1px solid rgb(var(--lav-200) / .28);
+    box-shadow: 0 0 28px rgb(var(--lav-500) / .28), inset 0 0 22px rgb(var(--lav-400) / .12);
+  }
+  .logo-orbit::before {
+    transform: rotateX(72deg) rotateZ(0deg);
+    animation: ringSpin 9s linear infinite;
+  }
+  .logo-orbit::after {
+    inset: .05rem;
+    transform: rotateY(68deg) rotateZ(35deg);
+    animation: ringSpin 12s linear infinite reverse;
+  }
+  @media (min-width: 640px) {
+    .logo-orbit { width: 10.5rem; height: 10.5rem; }
+    .logo-orbit .brand-logo { width: 9.4rem; height: 9.4rem; }
+  }
+  @keyframes ringSpin {
+    to { rotate: 360deg; }
+  }
+  @keyframes logoBreathe {
+    0%,100% { transform: translateZ(42px) scale(1); filter: saturate(1); }
+    50% { transform: translateZ(58px) scale(1.03); filter: saturate(1.18); }
+  }
+
   .glow-btn {
     transition: all .2s;
     position: relative;
     overflow: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
   .glow-btn::before {
     content: '';
@@ -351,7 +485,7 @@ tailwind.config = {
     transition: opacity .2s;
   }
   .glow-btn:hover::before { opacity: 1; }
-  .glow-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgb(var(--lav-600) / .5); }
+  .glow-btn:hover { transform: translateY(-3px) translateZ(14px); box-shadow: 0 12px 30px rgb(var(--lav-600) / .5); }
   .glow-btn:active { transform: translateY(1px); box-shadow: none; }
 
   .pick-btn {
@@ -415,6 +549,20 @@ tailwind.config = {
   .theme-card.locked .theme-card-inner { filter: grayscale(.8) brightness(.45); }
   .theme-card.selected { box-shadow: 0 0 0 3px rgb(var(--lav-400)), 0 0 24px rgb(var(--lav-500) / .6); }
   .theme-card:hover:not(.locked) { transform: translateY(-3px); }
+
+  .tilt-panel {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;
+  }
+  .tilt-panel:hover,
+  .mode-btn:hover,
+  .diff-btn:hover:not(.selected),
+  .pick-btn:hover:not(.selected):not(:disabled),
+  .theme-card:hover:not(.locked) {
+    transform: perspective(800px) rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg)) translateY(-4px);
+    box-shadow: 0 18px 42px rgb(var(--lav-950) / .38), 0 0 24px rgb(var(--lav-500) / .22);
+  }
 
   .target-chip {
     transition: all .2s;
@@ -801,11 +949,42 @@ tailwind.config = {
   .player-tide-chip.danger .player-tide-bar > div {
     background: linear-gradient(90deg, #f87171, #ef4444);
   }
+
+  .tap-ripple {
+    position: absolute;
+    left: var(--ripple-x, 50%);
+    top: var(--ripple-y, 50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 2px solid rgba(180,230,255,.75);
+    transform: translate(-50%, -50%) scale(0);
+    animation: tapRipple .7s ease-out forwards;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes tapRipple {
+    to { transform: translate(-50%, -50%) scale(5.5); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: .001ms !important;
+    }
+  }
 </style>
 </head>
 <body class="bg-deep min-h-screen" data-theme="lavender">
 
 <!-- ══════════════════ AMBIENT FX ══════════════════ -->
+<div class="ambient-3d" aria-hidden="true">
+  <div class="orbital-glow"></div>
+  <div class="wave-plane back"></div>
+  <div class="wave-plane"></div>
+</div>
 <div id="ocean-particles" class="pointer-events-none fixed inset-0 z-0"></div>
 <div id="storm-flash" class="storm-flash"></div>
 
@@ -853,7 +1032,9 @@ tailwind.config = {
 <!-- ══════════════════ SCREEN: MENU ══════════════════ -->
 <div id="screen-menu" class="screen active flex-col items-center justify-center min-h-screen px-4 py-12">
   <div class="animate-slide-up text-center mb-8">
-    <div class="text-6xl mb-3 animate-float">⚓</div>
+    <div class="logo-orbit animate-float">
+      <img src="logo_tt.jpeg" alt="Tide Turner logo" class="brand-logo">
+    </div>
     <h1 class="font-display text-5xl font-black tracking-wide mb-2 title-shimmer">Tide Turner</h1>
     <p class="text-lav-400 text-base font-body">Find and sink your opponents' fleets</p>
   </div>
@@ -1069,7 +1250,7 @@ tailwind.config = {
 
     <div class="flex items-center justify-between mb-3 animate-fade-in">
       <div class="flex items-center gap-2">
-        <span class="text-2xl">⚓</span>
+        <img src="logo_tt.jpeg" alt="Tide Turner logo" class="brand-logo w-9 h-9 rounded-full">
         <span class="font-display font-bold text-lav-200 text-lg hidden sm:inline">Tide Turner</span>
       </div>
       <div id="turn-pill" class="flex items-center gap-2 bg-lav-800/70 border border-lav-600/50 rounded-full px-3 py-1.5">
@@ -2473,6 +2654,54 @@ function launchConfetti() {
   setTimeout(() => { container.innerHTML = ''; }, 7000);
 }
 
+// ════════════════════ 3D INTERACTION LAYER ════════════════════
+function initInteractive3D() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const tiltSelectors = '.tilt-panel,.glow-btn,.mode-btn,.diff-btn,.pick-btn,.theme-card,.target-chip';
+
+  document.querySelectorAll('.glow-btn,.mode-btn,.diff-btn,.pick-btn,.theme-card,#menu-profile-box,#cpu-difficulty-box,#player-count-box')
+    .forEach(el => el.classList.add('tilt-panel'));
+
+  window.addEventListener('pointermove', (e) => {
+    const x = e.clientX / Math.max(window.innerWidth, 1);
+    const y = e.clientY / Math.max(window.innerHeight, 1);
+    document.body.style.setProperty('--pointer-x', (x * 100).toFixed(1) + '%');
+    document.body.style.setProperty('--pointer-y', (y * 100).toFixed(1) + '%');
+    document.body.style.setProperty('--tilt-y', ((x - .5) * 12).toFixed(2) + 'deg');
+    document.body.style.setProperty('--tilt-x', ((.5 - y) * 10).toFixed(2) + 'deg');
+  }, { passive: true });
+
+  document.addEventListener('pointermove', (e) => {
+    const el = e.target.closest(tiltSelectors);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / Math.max(rect.width, 1) - .5;
+    const y = (e.clientY - rect.top) / Math.max(rect.height, 1) - .5;
+    el.style.setProperty('--card-tilt-y', (x * 10).toFixed(2) + 'deg');
+    el.style.setProperty('--card-tilt-x', (-y * 8).toFixed(2) + 'deg');
+  }, { passive: true });
+
+  document.addEventListener('pointerout', (e) => {
+    const el = e.target.closest(tiltSelectors);
+    if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return;
+    el.style.removeProperty('--card-tilt-x');
+    el.style.removeProperty('--card-tilt-y');
+  });
+
+  document.addEventListener('pointerdown', (e) => {
+    const cell = e.target.closest('.grid-cell:not(.disabled)');
+    if (!cell) return;
+    const rect = cell.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'tap-ripple';
+    ripple.style.setProperty('--ripple-x', (e.clientX - rect.left) + 'px');
+    ripple.style.setProperty('--ripple-y', (e.clientY - rect.top) + 'px');
+    cell.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 750);
+  });
+}
+
 // ════════════════════ INIT ════════════════════
 applyTheme(currentTheme);
 selectMode('mp');
@@ -2481,6 +2710,7 @@ document.getElementById('pvp-counter').textContent = pvpGamesCompleted;
 updateThemeMenuLabel();
 updateSoundUI();
 seedOceanParticles();
+initInteractive3D();
 // Hydrate profile UI
 document.getElementById('menu-name-input').value = menuProfile.name;
 document.getElementById('menu-avatar-btn').textContent = menuProfile.avatar;
